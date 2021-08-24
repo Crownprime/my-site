@@ -1,17 +1,18 @@
+import React from 'react'
 import Head from 'next/head'
+import PostsList from '../components/posts-list'
 import { getSortedPostsData } from '../lib/posts'
 
 export async function getStaticProps() {
   const allPostsData = getSortedPostsData()
   return {
     props: {
-      allPostsData
-    }
+      allPostsData,
+    },
   }
 }
 
 export default function Home({ allPostsData }) {
-  console.log(allPostsData)
   return (
     <div className="container">
       <Head>
@@ -20,11 +21,7 @@ export default function Home({ allPostsData }) {
       </Head>
 
       <main>
-        {allPostsData.map(({ id, date, title }) => 
-          <li key={id}>
-            {title} <br />{id} <br />{date}
-          </li>
-        )}
+        <PostsList dataSource={allPostsData} />
       </main>
     </div>
   )

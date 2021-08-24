@@ -8,8 +8,10 @@ const PostsList: React.FC<{
     <div>
       {dataSource.map(({ title, date, id }) => (
         <Link href={'/post/' + id} key={id}>
-          <div>{title}</div>
-          <div>{date}</div>
+          <div>
+            <div>{title}</div>
+            <div>{date}</div>
+          </div>
         </Link>
       ))}
     </div>
