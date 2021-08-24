@@ -1,15 +1,21 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import {remark} from 'remark'
+import { remark } from 'remark'
 import html from 'remark-html'
+
+export type IPost = {
+  title: string
+  date: string
+}
 
 const postsDirectory = path.join(process.cwd(), 'posts')
 
-export function getSortedPostsData() {
+type IGetSortedPostsData = () => (IPost & { id: string })[]
+export const getSortedPostsData: IGetSortedPostsData = () => {
   // Get file names under /posts
   const fileNames = fs.readdirSync(postsDirectory)
-  const allPostsData = fileNames.map(fileName => {
+  const allPostsData: (IPost & { id: string })[] = fileNames.map(fileName => {
     // Remove ".md" from file name to get id
     const id = fileName.replace(/\.md$/, '')
 
@@ -20,15 +26,14 @@ export function getSortedPostsData() {
     // Use gray-matter to parse the post metadata section
     const matterResult = matter(fileContents)
 
-    // Combine the data with the id
     return {
       id,
-      ...matterResult.data
+      ...(matterResult.data as IPost),
     }
   })
-  // Sort posts by date
+  // 按时间排序
   return allPostsData.sort((a, b) => {
-    if (a.date < b.date) {
+    if (new Date(a.date) < new Date(b.date)) {
       return 1
     } else {
       return -1
@@ -36,13 +41,13 @@ export function getSortedPostsData() {
   })
 }
 
-export function getAllPostIds() {
+export const getAllPostIds = () => {
   const fileNames = fs.readdirSync(postsDirectory)
   return fileNames.map(fileName => {
     return {
       params: {
-        id: fileName.replace(/\.md$/, '')
-      }
+        id: fileName.replace(/\.md$/, ''),
+      },
     }
   })
 }
@@ -54,13 +59,15 @@ export async function getPostData(id) {
   // Use gray-matter to parse the post metadata section
   const matterResult = matter(fileContents)
 
-  const processedContent = await remark().use(html).process(matterResult.content)
+  const processedContent = await remark()
+    .use(html)
+    .process(matterResult.content)
   const contentHtml = processedContent.toString()
 
   // Combine the data with the id
   return {
     id,
     contentHtml,
-    ...matterResult.data
+    ...matterResult.data,
   }
 }
