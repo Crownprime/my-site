@@ -1,3 +1,4 @@
+import PostContext from '../../components/post-context'
 import { getAllPostIds, getPostData } from '../../lib/posts'
 
 export async function getStaticPaths() {
@@ -18,13 +19,5 @@ export async function getStaticProps({ params }) {
 }
 
 export default function Post({ postData }) {
-  return (
-    <div>
-      {postData.title} <br />
-      {postData.id} <br />
-      {postData.date}
-      <br />
-      <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }}></div>
-    </div>
-  )
+  return <PostContext dataSource={postData} />
 }

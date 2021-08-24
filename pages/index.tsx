@@ -14,14 +14,16 @@ export async function getStaticProps() {
 
 export default function Home({ allPostsData }) {
   return (
-    <div className="container">
+    <div>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <PostsList dataSource={allPostsData} />
+        <div className="container mx-auto">
+          <PostsList dataSource={allPostsData} />
+        </div>
       </main>
     </div>
   )
