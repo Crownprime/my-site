@@ -1,5 +1,5 @@
 import React from 'react'
-import Head from 'next/head'
+import DocHead from '../components/doc-head'
 import PostsList from '../components/posts-list'
 import { getSortedPostsData } from '../lib/posts'
 
@@ -15,10 +15,7 @@ export async function getStaticProps() {
 export default function Home({ allPostsData }) {
   return (
     <div>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <DocHead title="July's Site" />
 
       <main>
         <div className="container mx-auto">
