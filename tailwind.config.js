@@ -2,10 +2,14 @@ module.exports = {
   mode: 'jit',
   purge: ['./pages/**/*.tsx', './components/**/*.tsx'],
   darkMode: false, // or 'media' or 'class'
+  corePlugins: {
+    container: false,
+  },
   theme: {
     extend: {},
-    color: {
+    colors: {
       N: {
+        0: '#ffffff',
         50: '#f5f6f7',
         500: '#8f959e',
         900: '#1f2329',
@@ -13,9 +17,14 @@ module.exports = {
       },
     },
     fontSize: {
-      sm: ['14px', '20px'],
-      base: ['16px', '24px'],
-      lg: ['20px', '28px'],
+      sm: ['12px', '20px'],
+      base: ['14px', '22px'],
+      lg: ['16px', '24px'],
+      xl: ['18px', '26px'],
+      '2xl': ['20px', '28px'],
+      '3xl': ['22px', '30px'],
+      '4xl': ['24px', '32px'],
+      '5xl': ['30px', '40px'],
     },
     spacing: {
       sm: '8px',

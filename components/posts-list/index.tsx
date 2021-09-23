@@ -6,13 +6,16 @@ const PostsList: React.FC<{
 }> = ({ dataSource }) => {
   return (
     <div>
-      {dataSource.map(({ title, date, id }) => (
-        <Link href={'/post/' + id} key={id}>
-          <div className="w-full mb-md cursor-pointer">
-            <div className="text-lg">{title}</div>
-            <div className="text-base">{date}</div>
+      {dataSource.map(({ title, sub, date, id }) => (
+        <div className="w-full mb-lg" key={id}>
+          <div className="text-3xl text-N-900">
+            <Link href={'/post/' + id}>
+              <span className="cursor-pointer">{title}</span>
+            </Link>
           </div>
-        </Link>
+          <div className="text-base text-N-500">{sub}</div>
+          <div className="text-sm text-N-500">{date}</div>
+        </div>
       ))}
     </div>
   )
