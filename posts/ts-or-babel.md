@@ -3,6 +3,7 @@ title: ts-loader 还是 babel-loader？
 sub: run dev 可不可以快点呢？
 tags: Geek
 date: 2021/08/31
+status: draft
 ---
 在使用 ts + react + webpack 工具链开发应用的时候，必不可少需要使用特定的 loader 将 ts 或者 tsx 转化为浏览器可以识别的 js。这一步最初是交给 ts-loader 来处理，ts-loader 内部是调用 typescript 的 tsc 命令来编译 ts 文件。在 babel@7 之后，babel 直接就支持了对 ts 的编译。饱受编译速度折磨的人明显的感觉到这里似乎有捣鼓的空间......
 
