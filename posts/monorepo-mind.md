@@ -1,6 +1,6 @@
 ---
 title: 关于 monorepo 的一些感想
-date: 2021/8/24
+date: Tue Aug 24 2021 07:16:21 GMT+0800 (中国标准时间)
 ---
 在 monorepo 之前，一直没有特别好的项目结构阐述具有一定弱关联或者具有依赖性质的项目之间的相处方式。
 
@@ -49,6 +49,7 @@ monorepo 已经有了非常好的实践（惭愧的是我在来字节之前都�
 在评价 monorepo 和 multiple repos 优劣势之前，首先我们要着眼 monorepo 解决了什么问题，然后我们就可以得到结论哪些工程应当使用 monorepo。写下这段话的时候让我想到了前段时间 Dan 的访谈：
 
 > 主持人：有些用户已经尝试过使用 Server Component 了，所以当我们需要在项目中使用服务器组件的时候，我们需要维护三个组件而不是一个，这带来了额外的复杂性不是吗？
+
 > Dan：对于这个问题而言，不是说你的组件在将来都会以三种形态存在，而是你现在只能用 Client Component 的组件。如果只用 Client Component 能够满足需求的话固然很好，但是当这个 Server Component 这个特性落地的时候，你会有更多的选择来做相同的事。
 
 我认为这段话也很好的阐述了 monorepo 和 multiple repos 的关系。如果 single repo 能够很好的管理 code 那就固然是 ok 的，而 monorepo 的概念只不过让你有了更多的选择，我们要做的就是根据自己的情况做出较优的选择。

@@ -15,8 +15,12 @@ export const PostContentHtml = styled.div`
   }
   p {
     font-size: 16px;
-    line-height: 22px;
+    line-height: 26px;
+    font-weight: 400;
+    margin-top: 8px;
     margin-bottom: 8px;
+    color: #1f2329;
+    letter-spacing: 0.02em;
   }
   code {
     font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
@@ -32,6 +36,13 @@ export const PostContentHtml = styled.div`
     code {
       color: #aaaaaa;
       font-size: 14px;
+    }
+  }
+  blockquote {
+    border-left: 2px solid #8f959e;
+    padding-left: 8px;
+    p {
+      color: #8f959e;
     }
   }
 `
