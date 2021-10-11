@@ -19,7 +19,7 @@ sub: 还在为理不清的依赖版本而头痛吗？在？看看 rushjs
 
 yarn 存在的问题，主要体现在它对 node_modules 的处理方式。
 
-![图片](http://i.july.icu/images/08bfc6663e3cfd4d0be2b8e0dc97b3f76dea11f346876e4cdbcf6555256a3fd7.png)
+![图片](//www.july.icu/images/08bfc6663e3cfd4d0be2b8e0dc97b3f76dea11f346876e4cdbcf6555256a3fd7.png)
 
 和 npm@3 相同的是 yarn 会摊平依赖。
 
