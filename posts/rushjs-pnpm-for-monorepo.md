@@ -73,6 +73,8 @@ yarn + yarn workspace + lerna
 
 在 npm@3 之前，node_modules 的结构是树状递归的。
 
+![图片](//www.july.icu/images/c920a320630d12820746b4515575725b8a04d0581efcadf4eebbfc8e1bd25ab2.png)
+
 这样做的好处是：
 
 - 结构一目了然，且每个包的依赖唯一可被确定
@@ -89,6 +91,8 @@ pnpm 是这样设计 node_modules 的：
 
 `pnpm add foo`
 
+![图片](//www.july.icu/images/2f4f0bda1b830d815ccf6542a70c8b52e15dba5635aa59ff41a8c4e0f997dfe2.png)
+
 - 非完全扁平化的目录结构可以保证依赖的指向具有准确性，解决虚拟依赖的问题。
 
 - 通过软链复用相同版本的依赖，解决依赖重复的问题。
@@ -100,6 +104,8 @@ pnpm 是这样设计 node_modules 的：
 # rushjs 做了哪些
 
 ## 统一命令
+
+![图片](//www.july.icu/images/da50b7ceb036524f52c1e99e3a27ec6a6d8f802326e3e841ba1f34093a69ccb4.png)
 
 使用 rushjs，不再需要去记住三种东西的命令，所有的功能都在 rush 层面进行了补齐。可以认为过去传统的 yarn workspace + lerna 的模式是建立在两者相互补充能力的基础上；而 rush 则处于更上层的位置全面接管 monorepo 的方方面面，让 (p)npm、yarn 回归包管理工具本身。
 
@@ -117,6 +123,8 @@ rush add -p [packageName] [--dev]
 
 `rush update` 类似于 `yarn install`，主要用于安装 monorepo 的依赖。不过为了构建更合理的 node_modules 结构，rush 做了更多。
 
+![图片](//www.july.icu/images/b752c5e6804f2edc5e9a5cf0558183db8f76cb7971c05546ce9b0cc7c0cbaac7.png)
+
 rush update 做了四件事：
 
 1. 分析 monorepo 中各个project的直接依赖关系总结出一份“common-package.json”放到临时目录，里面包含的依赖版本可以满足项目中所有需求。
@@ -124,6 +132,8 @@ rush update 做了四件事：
   - 存在依赖 libA，projectA 依赖 libA: ^1.0.1，projectB 依赖 libA: ^1.0.2，认为libA@1.0.2 可以满足所有需求，列入package.json。
   
   - 此package.json中还包含所有本地 project 的“副本”
+
+![图片](//www.july.icu/images/9b7f6e8d7cd6d9920f44558387aaabfcf6d4e902c1f053def4316e263174abf6.png)
 
 2. 把各个本地 project 中的 package.json 拷贝一份副本到临时目录
 
@@ -146,12 +156,18 @@ rush update 做了四件事：
 rush build --to B
 ```
 
+![图片](//www.july.icu/images/c612360603b8dcdd71ab034aacffef7d1b0608b601c3d11642da3e89d83a73f0.png)
+
 ```
 // 仅 build B 的依赖
 rush build --to-except B
 ```
 
+![图片](//www.july.icu/images/994d7222081b10c744483beeaa989a71fd64b8409d2042b4aef36ff9aa3cd0ae.png)
+
 ### lerna + pnpm?
+
+TODO
 
 # 目前遇到的问题
 
@@ -161,9 +177,15 @@ rush build --to-except B
 
 但在 pnpm 下，如果组件 devDependencies 的版本与业务应用版本不同会出现引用不同版本的包的情况，对于 React 等单例依赖可能会直接报错。
 
+![图片](//www.july.icu/images/7a2cbe3593052737a88612c2eb7c1e493d06107c26dcfbcba773a0fbb77af747.png)
+
 正常的远程依赖包：devDependencies 不会被下载，所以会向上检索到 app 的 node_modules，一切正常。
 
 pnpm 下的本地依赖包：通过软链连接到 app 的 node_modules，按照 node_modules 检索规则，调用的 components 会优先检查自己 node_modules 下的依赖，与远程依赖不同的是本地的 components 下存在 devDependencies 下载的 R16。得益于 pnpm 的特性同版本的依赖包会被软链到 pnpm store 中的同一个包，所以 appA 中的 R16 和 components 中的 R16 是同一个包不会报错，但 appB 会跑不起来。
+
+[有个 issues 有具体的说明](https://github.com/pnpm/pnpm/issues/3558)，zkochan 答复给出了非常暴力的临时解决方案：
+
+![图片](//www.july.icu/images/5bb5b274752ea4540ec133e14a33a82ceaef7a28022d7caeb86ca112e893874c.png)
 
 ## eslint & prettier
 
