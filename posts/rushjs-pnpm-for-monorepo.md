@@ -3,6 +3,8 @@ title: rush.js + pnpm —— monorepo 终极解决方案
 date: Sun Sep 26 2021 18:01:07 GMT+0800 (中国标准时间)
 sub: 还在为理不清的依赖版本而头痛吗？在？看看 rushjs
 ---
+前段时间在团队内部分享了关于 monorepo 的解决方案，觉得还算有意义就略作复盘改进发到博客上来。其实字节内部已经有很多团队开始转型探索 rush + pnpm，得益于我们团队的项目比较年轻所以有比较大的改造空间。
+
 我们项目目前是采用 monorepo 的方式去管理其下多端的应用，不过随着项目逐渐庞大，许多问题开始暴露出来。这推动我们去思考和改造目前的项目结构。[5000 万行以上大型代码仓库工程实践](https://mp.weixin.qq.com/s/opCnSlnKYhrNkjP8xN-EGA)
 
 在此之前，我们采用的是时下比较常见的 yarn workspace + lerna 的方式管理 monorepo。yarn 主要还是解决各个 package 之间的 link 关系，达到代码复用的目的[yarn link 是如何工作的](https://classic.yarnpkg.com/en/docs/workspaces#search)。lerna 主要处理 publish 问题。所以可以总结为：
@@ -16,6 +18,8 @@ sub: 还在为理不清的依赖版本而头痛吗？在？看看 rushjs
 # yarn workspace 存在的问题
 
 yarn 存在的问题，主要体现在它对 node_modules 的处理方式。
+
+![图片](http://i.july.icu/images/08bfc6663e3cfd4d0be2b8e0dc97b3f76dea11f346876e4cdbcf6555256a3fd7.png)
 
 和 npm@3 相同的是 yarn 会摊平依赖。
 
