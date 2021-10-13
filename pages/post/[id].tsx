@@ -1,7 +1,11 @@
+import { FC } from 'react'
+import { GetStaticProps, GetStaticPaths } from 'next'
+import { head } from 'lodash-es'
 import PostContext from '../../components/post-context'
-import { getAllPostIds, getPostData } from '../../lib/posts'
+import { getAllPostIds } from '../../lib/posts'
+import { getPostData, PostData } from '../../apis/posts'
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   const paths = getAllPostIds()
   return {
     paths,
@@ -9,8 +13,9 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ params }) {
-  const postData = await getPostData(params.id)
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const id = Array.isArray(params.id) ? head(params.id) : params.id
+  const postData = await getPostData(id)
   return {
     props: {
       postData,
@@ -18,6 +23,8 @@ export async function getStaticProps({ params }) {
   }
 }
 
-export default function Post({ postData }) {
-  return <PostContext dataSource={postData} />
+const PostPage: FC<{ postData: PostData }> = ({ postData }) => {
+  return <PostContext data={postData} />
 }
+
+export default PostPage

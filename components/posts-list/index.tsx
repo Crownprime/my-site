@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { ClockCircleOutlined } from '@ant-design/icons'
+import { ClockIcon } from '@heroicons/react/outline'
 
 const PostsList: React.FC<{
   dataSource: any
@@ -10,7 +10,7 @@ const PostsList: React.FC<{
       {dataSource.map(({ title, sub, date, id }) => (
         <div className="w-full mb-xl" key={id}>
           <div className="text-base text-N-500 flex items-center mb-[4px]">
-            <ClockCircleOutlined />
+            <ClockIcon className="h-md w-md" />
             <span className="pl-sm">{date}</span>
           </div>
           <div className="text-3xl text-N-900">

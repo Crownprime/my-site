@@ -1,19 +1,15 @@
-import { PostContentHtml } from './style'
-import { ClockCircleOutlined } from '@ant-design/icons'
+import { FC } from 'react'
+import Container from '../layout/container'
+import { PostData } from '../../apis/posts'
+import PostHead from './post-head'
+import PostText from './post-text'
 
-const PostContext = ({ dataSource }) => {
+const PostContext: FC<{ data: PostData }> = ({ data }) => {
   return (
-    <div className="container mx-auto">
-      <div className="text-5xl text-N-900">{dataSource.title}</div>
-      <div className="text-base text-N-500 flex items-center mt-[4px]">
-        <ClockCircleOutlined />
-        <span className="pl-sm">{dataSource.date}</span>
-      </div>
-      <br />
-      <PostContentHtml>
-        <div dangerouslySetInnerHTML={{ __html: dataSource.contentHtml }}></div>
-      </PostContentHtml>
-    </div>
+    <Container>
+      <PostHead data={data} />
+      <PostText data={data} />
+    </Container>
   )
 }
 

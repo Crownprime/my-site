@@ -3,6 +3,7 @@ import path from 'path'
 import matter from 'gray-matter'
 import { remark } from 'remark'
 import html from 'remark-html'
+import remarkToc from 'remark-toc'
 
 export type IPost = {
   title: string
@@ -62,15 +63,41 @@ export async function getPostData(id) {
   // Use gray-matter to parse the post metadata section
   const matterResult = matter(fileContents)
 
-  const processedContent = await remark()
+  const { children: tree } = await remark()
     .use(html)
-    .process(matterResult.content)
-  const contentHtml = processedContent.toString()
-
+    .parse(matterResult.content)
+  const headingList = tree.filter(node => node.type === 'heading')
+  const toc = []
+  const s = []
+  for (let i = 0; i < headingList.length; i++) {
+    const node = {
+      depth: (headingList[i] as any).depth,
+      text: (headingList[i] as any).children,
+      children: [],
+    }
+    while (true) {
+      if (!s.length) {
+        s.push(node)
+        toc.push(node)
+        break
+      }
+      const p = s[s.length - 1]
+      if (p.depth < node.depth) {
+        p.children.push(node)
+        s.push(node)
+        break
+      }
+      if (p.depth === node.depth || p.depth > node.depth) {
+        s.pop()
+        continue
+      }
+    }
+  }
+  console.log(JSON.stringify(toc))
   // Combine the data with the id
   return {
     id,
-    contentHtml,
+    content: matterResult.content,
     ...matterResult.data,
   }
 }
