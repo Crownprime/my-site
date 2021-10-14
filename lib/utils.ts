@@ -1,4 +1,8 @@
 import { last, cloneDeep } from 'lodash-es'
+
+/**************************************************************************
+ * 根据摊平的目录节点构建 toc 树
+ */
 export type TOCListItem = {
   depth: number
   children: {
@@ -10,7 +14,6 @@ export type TOCNode = {
   text: string
   children: TOCNode[]
 }
-
 export function crateTOCTree(list: TOCListItem[], dep?: number) {
   let _list = cloneDeep<TOCListItem[]>(list)
   if (dep) {

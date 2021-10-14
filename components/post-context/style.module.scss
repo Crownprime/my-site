@@ -19,25 +19,53 @@
 
 .postTextHtml {
   h1 {
-    font-size: 20px;
+    color: $N800;
+    font-size: 18px;
     line-height: 26px;
+    padding-bottom: $mini;
     margin: 24px 0 16px 0;
     font-weight: 500;
+    border-bottom: 1px dashed $N300;
+    &::before {
+      content: "#";
+      color: $N400;
+      padding-right: $sm;
+    }
   }
   h2 {
     font-size: 18px;
     line-height: 24px;
-    margin-bottom: 8px;
-    font-weight: 500;
+    padding-top: $sm;
+    margin: $lg 0 $md 0;
+    &::before {
+      content: "##";
+      color: $N400;
+      padding-right: $sm;
+    }
+  }
+  h3 {
+    font-size: 16px;
+    line-height: 22px;
+    &::before {
+      content: "###";
+      color: $N400;
+      padding-right: $sm;
+    }
   }
   p {
     font-size: 16px;
-    line-height: 26px;
+    line-height: 30px;
     font-weight: 400;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    color: #1f2329;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    color: $N800;
     letter-spacing: 0.02em;
+    > code {
+      background: $N800;
+      color: $N300;
+      padding: 2px $sm;
+      border-radius: $mini;
+    }
   }
   code {
     font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
@@ -45,14 +73,14 @@
       monospace;
   }
   pre {
-    background-color: #212121;
-    border-radius: 4px;
-    padding: 4px;
+    background: $N800;
+    border-radius: $mini;
+    padding: $sm;
     width: 100%;
     overflow-x: auto;
-    margin-bottom: 8px;
+    margin: $md 0;
     code {
-      color: #aaaaaa;
+      color: $N300;
       font-size: 14px;
     }
   }
@@ -61,6 +89,21 @@
     padding-left: 8px;
     p {
       color: #8f959e;
+    }
+  }
+  ul > li > p{
+    margin: 0;
+    position: relative;
+    padding-left: 26px;
+    &::before {
+      position: absolute;
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 6px;
+      background: $N400;
+      left: 5px;
+      top: 10px;
     }
   }
 }

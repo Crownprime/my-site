@@ -2,8 +2,8 @@ import { FC } from 'react'
 import { head } from 'lodash-es'
 import ReactMarkdown from 'react-markdown'
 import ScrollableAnchor, { configureAnchors } from 'react-scrollable-anchor'
-import PostImage from '../post-image'
-import { PostData, TOCNode } from '../../apis/posts'
+import PostImage from 'components/post-image'
+import { PostData, TOCNode } from 'apis/posts'
 import { PostTextStyleComponent } from './style-components'
 
 configureAnchors({ offset: -65 })
@@ -21,14 +21,14 @@ const PostHtml: FC<{ data: PostData }> = ({ data }) => {
         },
         h1({ children }) {
           return (
-            <ScrollableAnchor id={head(children)}>
+            <ScrollableAnchor id={head(children as string[])}>
               <h1>{head(children)}</h1>
             </ScrollableAnchor>
           )
         },
         h2({ children }) {
           return (
-            <ScrollableAnchor id={head(children)}>
+            <ScrollableAnchor id={head(children as string[])}>
               <h2>{head(children)}</h2>
             </ScrollableAnchor>
           )
@@ -43,7 +43,7 @@ const PostHtml: FC<{ data: PostData }> = ({ data }) => {
 const PostToc: FC<{ toc: PostData['toc'] }> = ({ toc }) => {
   const createTree = (node: TOCNode) => {
     return (
-      <li>
+      <li key={node.text}>
         <a href={'#' + node.text}>{node.text}</a>
         {Boolean(node.children.length) && (
           <ul>{node.children.map(n => createTree(n))}</ul>

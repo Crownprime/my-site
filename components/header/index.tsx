@@ -42,7 +42,9 @@ const Header = () => {
                 href={route.pathname}
                 passHref={pathname === route.pathname}
               >
-                <div className="mr-md cursor-pointer">{route.text}</div>
+                <div className="mr-md cursor-pointer" key={route.pathname}>
+                  {route.text}
+                </div>
               </Link>
             ))}
           </div>
