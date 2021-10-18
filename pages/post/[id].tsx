@@ -1,12 +1,14 @@
 import { FC } from 'react'
 import { GetStaticProps, GetStaticPaths } from 'next'
 import { head } from 'lodash-es'
-import PostContext from '../../components/post-context'
-import { getAllPostIds } from '../../lib/posts'
-import { getPostData, PostData } from '../../apis/posts'
+import DocHead from 'components/doc-head'
+import Header from 'components/header'
+import Footer from 'components/footer'
+import PostView from 'features/post'
+import { getPostData, getPostsDataIds, PostData } from 'apis/posts'
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = getAllPostIds()
+  const paths = getPostsDataIds().map(id => ({ params: { id } }))
   return {
     paths,
     fallback: false,
@@ -15,7 +17,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const id = Array.isArray(params.id) ? head(params.id) : params.id
-  const postData = await getPostData(id)
+  const postData = getPostData(id)
   return {
     props: {
       postData,
@@ -24,7 +26,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 }
 
 const PostPage: FC<{ postData: PostData }> = ({ postData }) => {
-  return <PostContext data={postData} />
+  return (
+    <div>
+      <DocHead title={postData.title} />
+      <Header />
+      <PostView data={postData} />
+      <Footer />
+    </div>
+  )
 }
 
 export default PostPage

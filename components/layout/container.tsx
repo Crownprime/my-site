@@ -1,8 +1,11 @@
 import React from 'react'
+import cls from 'classnames'
 
-const Container: React.FC = ({ children }) => {
+const Container: React.FC<{
+  className?: string
+}> = ({ children, className }) => {
   return (
-    <div className="layout-container">
+    <div className={cls('layout-container', className)}>
       {children}
       <style jsx>{`
         .layout-container {

@@ -18,19 +18,12 @@ body {
   margin: 0 auto;
 }
 
-
-@media screen and (max-width: 1040px) {
-  .container {
-    width: 100%;
-    padding: 0 16px;
-  }
-
-  .post-content-toc {
-    display: none;
-  }
-  .post-content-html {
-    margin-right: 0;
-  }
+.icon {
+  display: inline-block;
+  width: 1em; height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 }
 
 @keyframes skeleton-loading {

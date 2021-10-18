@@ -1,6 +1,15 @@
 import { FC } from 'react'
 import cls from 'classnames'
+import Container from 'components/layout/container'
 import styles from './style.module.scss'
+
+export const PostHeadWrap = ({ children }) => {
+  return (
+    <div className={styles.postHead}>
+      <Container>{children}</Container>
+    </div>
+  )
+}
 
 export const PostTextStyleComponent: FC<{
   postHtml: JSX.Element

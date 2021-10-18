@@ -1,0 +1,26 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: $HeadH;
+  background: $N000;
+  z-index: 10;
+  :global(.header-menus) {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    :global(.header-menus-link) {
+      cursor: pointer;
+      font-size: 16px;
+      color: $N800;
+      margin-right: $lg;
+      height: $HeadH;
+      display: flex;
+      align-items: center;
+      span {
+        margin-left: $mini;
+      }
+    }
+  }
+}

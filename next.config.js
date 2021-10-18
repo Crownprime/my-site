@@ -8,7 +8,7 @@ const withTM = require('next-transpile-modules')(['remark-html'])
 const nextConfig = withTM({
   sassOptions: {
     // includePaths: [path.join(__dirname, 'styles/theme.scss')],
-    prependData: `@import "styles/theme.scss";`,
+    prependData: `@import "styles/variables.scss";@import "styles/theme.scss";`,
   },
 })
 
