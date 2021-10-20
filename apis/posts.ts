@@ -8,6 +8,7 @@ import { crateTOCTree, TOCNode } from '../lib/utils'
 const postsDirectory = path.join(process.cwd(), 'posts')
 export type PostMeta = {
   title: string
+  sub: string
   date: string
   status: string
   tags: string

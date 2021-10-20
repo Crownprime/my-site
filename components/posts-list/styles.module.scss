@@ -1,0 +1,28 @@
+.postsListItem {
+  margin-bottom: $xl;
+  &Title {
+    color: $N700;
+    font-size: 24px;
+    margin-bottom: $mini;
+    cursor: pointer;
+  }
+  &Sub {
+    font-size: 16px;
+    color: $N400;
+  }
+  &Date {
+    font-size: 14px;
+    color: $N400;
+    margin-top: $sm;
+    span {
+      margin-left: $mini;
+    }
+  }
+  &Tags {
+    font-size: 14px;
+    color: $N400;
+    span {
+      margin-left: $mini;
+    }
+  }
+}

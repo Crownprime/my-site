@@ -8,7 +8,7 @@ const Home: FC<{ postsData: PostsData }> = ({ postsData }) => {
     <main>
       <Cover />
       <div className="container">
-        <PostsList dataSource={postsData} />
+        <PostsList data={postsData} />
       </div>
     </main>
   )

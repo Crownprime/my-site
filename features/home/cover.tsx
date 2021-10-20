@@ -9,7 +9,7 @@ const Cover = () => {
   const handleClick = () => {
     const windowH =
       document.documentElement.clientHeight || document.body.clientHeight
-    scroll.scrollTo(windowH)
+    scroll.scrollTo(windowH - 60)
   }
   return (
     <div className={styles.homeCover}>

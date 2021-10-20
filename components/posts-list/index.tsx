@@ -1,25 +1,18 @@
 import React from 'react'
 import Link from 'next/link'
-import { ClockIcon } from '@heroicons/react/outline'
+import { echoTime } from 'lib'
+import { PostsData } from 'apis/posts'
+import { PostSListItemWrap } from './styleComponents'
 
 const PostsList: React.FC<{
-  dataSource: any
-}> = ({ dataSource }) => {
+  data: PostsData
+}> = ({ data }) => {
   return (
     <div>
-      {dataSource.map(({ title, sub, date, id }) => (
-        <div className="w-full mb-xl" key={id}>
-          <div className="text-base text-N-500 flex items-center mb-[4px]">
-            <ClockIcon className="h-md w-md" />
-            <span className="pl-sm">{date}</span>
-          </div>
-          <div className="text-3xl text-N-900">
-            <Link href={'/post/' + id}>
-              <span className="cursor-pointer">{title}</span>
-            </Link>
-          </div>
-          <div className="text-base text-N-500 mt-sm">{sub}</div>
-        </div>
+      {data.map(({ title, sub, date, tags, id }) => (
+        <PostSListItemWrap key={id} sub={sub} date={echoTime(date)} tags={tags}>
+          <Link href={'/post/' + id}>{title}</Link>
+        </PostSListItemWrap>
       ))}
     </div>
   )
