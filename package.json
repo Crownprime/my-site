@@ -11,6 +11,7 @@
     "classnames": "^2.3.1",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.10.7",
+    "framer-motion": "^4.1.17",
     "gray-matter": "^4.0.3",
     "lodash-es": "^4.17.21",
     "next": "11.1.0",
