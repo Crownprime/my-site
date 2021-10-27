@@ -4,6 +4,7 @@ import ExpandMore from './expand-more'
 
 export { default as AlarmIcon } from './alarm'
 export { default as StyleIcon } from './style'
+export { default as CloseIcon } from './close'
 
 export const HomeIcon = Home
 export const DashboardIcon = Dashboard

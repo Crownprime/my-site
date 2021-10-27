@@ -1,8 +1,8 @@
 import { FC, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Image, { ImageProps } from 'next/image'
-import { XIcon } from '@heroicons/react/outline'
 import { ImagePreviewWrap } from './style'
+import { CloseIcon } from 'components/icons'
 
 const ImagePreview: FC<
   ImageProps & {
@@ -15,8 +15,8 @@ const ImagePreview: FC<
   }
   return createPortal(
     <ImagePreviewWrap>
-      <div className="control-wrap">
-        <XIcon className="w-lg h-lg" onClick={handleClose} />
+      <div className="control-wrap text-4xl" onClick={handleClose}>
+        <CloseIcon />
       </div>
       <div className="image-wrap">
         <Image {...prop} layout="fill" objectFit="contain" />
