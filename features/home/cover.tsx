@@ -7,7 +7,6 @@ import { motion, useViewportScroll, useTransform } from 'framer-motion'
 
 const Cover = () => {
   const { vh } = useViewport()
-  console.log(vh)
   const { scrollY } = useViewportScroll()
   const opacity = useTransform(scrollY, [0, vh], [1, 0])
   const handleClick = () => {
@@ -17,29 +16,20 @@ const Cover = () => {
     <div className={styles.homeCover}>
       <WriteText />
       <div className={styles.homeCoverExpand}>
-        <motion.div style={{ opacity }}>
-          <div className="expand-animate" onClick={handleClick}>
-            <ExpandMoreIcon />
-          </div>
+        <motion.div
+          className="cursor-pointer"
+          style={{ opacity }}
+          animate={{ y: 10 }}
+          transition={{
+            repeat: Infinity,
+            duration: 2,
+            repeatType: 'reverse',
+          }}
+          onClick={handleClick}
+        >
+          <ExpandMoreIcon />
         </motion.div>
       </div>
-      <style jsx>{`
-        .expand-animate {
-          animation-name: shakeY;
-          animation-iteration-count: infinite;
-          animation-duration: 2s;
-          cursor: pointer;
-        }
-        @keyframes shakeY {
-          from,
-          to {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-        }
-      `}</style>
     </div>
   )
 }

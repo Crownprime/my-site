@@ -98,10 +98,26 @@ const tags = new Array([
 
 ![图片](/images/129748804444323eded5b86f5509c8ebccf16141d43361535f802f8a393384a8.png)
 
+所以借助 `is` 我们可以非常优雅的完成类型范围缩小。
+
+```
+type Tag = {
+  text: string
+  color: string
+}
+const tags = [
+  flagA && { text: "textA", color: "colorA" },
+  flagB && { text: "textB", color: "colorB" }
+].filter((i): i is Tag => Boolean(i))
+```
+
+这段代码得到的变量 tags 的类型就是唯一确定的 `Tag[]`
+
 回过头来，我们再思考一下在 filter 中如果我们使用了范型 S，就必须有对应的断言函数呢？其实这就是 ts 的严谨性，我们可以发现范型 S，并不能随便指定它存在两个约束条件：
 
-- S 必须继承自 T
-- S 必须是 predicate 断言函数为真时的断言类型
+* S 必须继承自 T
+
+* S 必须是 predicate 断言函数为真时的断言类型
 
 仔细想一想如果失去了其中一种约束，这时是不是就等于
 
@@ -120,7 +136,7 @@ const tags = [...].filter(callback) as any[]
 
 值得深思的是，ts 被称为 js 的超集。而事实上 ts 仅仅存活在 ts server 或者 tsc 编译时中，所谓的类型约束。当类型与 js 逻辑产生耦合的时候就可能需要使用强制声明来弥补 ts 的不足。
 
-# based type guards: this
+# Based Type Guards: this
 
 我们已经知道了 `is` 具有断言的作用，当然这是针对使用函数判别某个变量时的场景。那么如果是在 `class` 内呢？先举个场景例子
 

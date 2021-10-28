@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Container from 'components/layout/container'
 import SkeletonBlock from '../skeleton-block'
 import { HomeIcon, DashboardIcon } from 'components/icons'
-import { HeaderWrap } from './styleComponents'
+import { HeaderStyled } from './styled'
 
 const routes = [
   {
@@ -38,7 +38,7 @@ const routes = [
 const Header = () => {
   const { pathname } = useRouter()
   return (
-    <HeaderWrap>
+    <HeaderStyled>
       {routes.map(route => (
         <Link href={route.pathname} passHref={pathname === route.pathname}>
           <div className="header-menus-link" key={route.pathname}>
@@ -46,7 +46,7 @@ const Header = () => {
           </div>
         </Link>
       ))}
-    </HeaderWrap>
+    </HeaderStyled>
   )
 }
 

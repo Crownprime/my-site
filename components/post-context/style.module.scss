@@ -51,6 +51,7 @@
   h3 {
     font-size: 16px;
     line-height: 22px;
+    margin: $md 0 $mini 0;
     &::before {
       content: "###";
       color: $N400;
@@ -70,6 +71,11 @@
       color: $N300;
       padding: 2px $sm;
       border-radius: $mini;
+    }
+    > a {
+      font-style: italic;
+      text-decoration: underline;
+      padding: 0 4px;
     }
   }
   code {
@@ -96,19 +102,22 @@
       color: #8f959e;
     }
   }
-  ul > li > p{
-    margin: 0;
-    position: relative;
-    padding-left: 20px;
-    &::before {
-      position: absolute;
-      content: "";
-      width: 6px;
-      height: 6px;
-      border-radius: 6px;
-      background: $N400;
-      left: 5px;
-      top: 12px;
+  ul {
+    padding-left: 8px;
+    > li > p{
+      margin: 0;
+      position: relative;
+      padding-left: 20px;
+      &::before {
+        position: absolute;
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 6px;
+        background: $N400;
+        left: 5px;
+        top: 12px;
+      }
     }
   }
 }
