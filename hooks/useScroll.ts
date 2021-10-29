@@ -24,6 +24,8 @@ const useScroll = () => {
         })
       }
     }
+    setScroll(getScroll())
+    console.log(getScroll())
     window.addEventListener('scroll', handleScroll)
     return () => {
       window.removeEventListener('scroll', handleScroll)

@@ -1,5 +1,6 @@
 import React from 'react'
 import cls from 'classnames'
+import theme from 'styles/theme'
 
 const Container: React.FC<{
   className?: string
@@ -10,12 +11,12 @@ const Container: React.FC<{
       <style jsx>{`
         .layout-container {
           margin: 0 auto;
-          width: 1200px;
+          width: 980px;
         }
-        @media screen and (max-width: 1280px) {
+        @media screen and (max-width: 1040px) {
           .layout-container {
             width: 100%;
-            padding: 0 16px;
+            padding: 0 ${theme.$lg};
           }
         }
       `}</style>

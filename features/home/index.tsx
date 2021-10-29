@@ -7,9 +7,7 @@ const Home: FC<{ postsData: PostsData }> = ({ postsData }) => {
   return (
     <main>
       <Cover />
-      <div className="container">
-        <PostsList data={postsData} />
-      </div>
+      <PostsList data={postsData} />
     </main>
   )
 }
