@@ -20,7 +20,7 @@ export const MenuItemStyled = forwardRef<
   {
     icon: JSX.Element
     text: string
-    onClick: () => void
+    onClick?: () => void
   }
 >(({ icon, text, onClick }, ref) => {
   return (

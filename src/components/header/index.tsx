@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { HomeIcon, DashboardIcon } from '@/components/icons'
 import { HeaderStyled, MenuItemStyled } from './styled'
@@ -17,7 +16,6 @@ const routes = [
 ]
 
 const Header = () => {
-  const { pathname } = useRouter()
   return (
     <HeaderStyled>
       {routes.map(route => (
