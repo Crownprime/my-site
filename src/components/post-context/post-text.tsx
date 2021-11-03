@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown'
 import ScrollableAnchor, { configureAnchors } from 'react-scrollable-anchor'
 import PostImage from '@/components/post-image'
 import { PostData, TOCNode } from 'apis/posts'
-import { PostTextStyleComponent } from './style-components'
+import { PostTextStyled } from './styled'
 
 configureAnchors({ offset: -65 })
 
@@ -56,9 +56,9 @@ const PostToc: FC<{ toc: PostData['toc'] }> = ({ toc }) => {
 
 const PostText: FC<{ data: PostData }> = ({ data }) => {
   return (
-    <PostTextStyleComponent
-      postHtml={<PostHtml data={data} />}
-      postToc={<PostToc toc={data.toc} />}
+    <PostTextStyled
+      html={<PostHtml data={data} />}
+      toc={<PostToc toc={data.toc} />}
     />
   )
 }
