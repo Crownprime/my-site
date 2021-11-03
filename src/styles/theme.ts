@@ -1,6 +1,7 @@
 const theme = {
   $N000: '#ffffff',
   $N050: '#FCFCFC',
+  $N100: '#F3F4F6',
   $N300: '#D1D5DB',
   $N400: '#9CA3AF',
   $N500: '#6B7280',
