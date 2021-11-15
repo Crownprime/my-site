@@ -1,73 +1,87 @@
-import { FC, useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 import cls from 'classnames'
 
-const commonText = '"Hello, I\'m J'
-const text0 = commonText + 'iangXujin"'
-const text1 = commonText + 'uly. "'
-const text2 = commonText + 'uly. Welcome to my Website!"'
-
 const writer = keyframes`
   50% {
-    border-color: transparent;
+    border-color: rgba(0, 0, 0, .85);
   }
 `
 
-const type = keyframes`
+const firstlyCommonText = 'Hello, I am J'
+// 第一次写出的字符串
+const firstlyText0 = firstlyCommonText + 'iangXujin'
+const firstlyText1 = firstlyCommonText + 'uly. '
+
+const secondaryText = 'Welcome to my Website! '
+// 1.先写下字符串 firstlyText0
+const firstlyWriteAction0 = keyframes`
   from {
     width: 0;
   }
   to {
-    width: ${text0.length}ch;
+    width: ${firstlyText0.length}ch;
   }
 `
-const type2 = keyframes`
+// 2.删减长度到 firstlyCommonText
+const firstlyDeleteAction = keyframes`
   from {
-    width: ${commonText.length}ch;;
-    content: ${text2};
+    width: ${firstlyText0.length}ch;
   }
   to {
-    width: ${text1.length - 2}ch;
-    content: ${text2};
+    width: ${firstlyCommonText.length}ch;
   }
 `
-const type3 = keyframes`
+// 3. 增加长度到 firstlyText1
+const firstlyWriteAction1 = keyframes`
   from {
-    width: ${text1.length - 2}ch;
-    content: ${text2};
+    width: ${firstlyCommonText.length}ch;;
+    content: "${firstlyText1}";
   }
   to {
-    width: ${text2.length}ch;
-    content: ${text2};
+    width: ${firstlyText1.length}ch;
+    content: "${firstlyText1}";
   }
 `
-const deleteKeyframes = keyframes`
+
+const secondaryWriteAction = keyframes`
   from {
-    width: ${text0.length}ch;
+    width: 0
   }
   to {
-    width: ${commonText.length}ch;
+    width: ${secondaryText.length}ch
   }
 `
 
 const Wrap = styled.div`
-  height: 24px;
-  line-height: 24px;
-  border-right: 0.1em solid black;
+  width: 300px;
   font-family: monospace;
-  font-size: 20px;
-  overflow: hidden;
-  white-space: nowrap;
   cursor: pointer;
+  color: ${props => props.theme.$T0};
+  .firstly,
+  .secondary {
+    border-right: 0.1em solid transparent;
+    overflow: hidden;
+    white-space: nowrap;
+  }
   &.animate {
-    width: ${text0.length}ch;
-    animation: ${type} 2.5s steps(20), ${writer} 1s infinite alternate,
-      ${deleteKeyframes} 0.5s steps(5) 2.5s, ${type2} 1s steps(4) 3s forwards,
-      ${type3} 3s steps(22, end) 6s forwards;
-    &::before {
-      content: ${text0};
-      animation: ${type2} 1s steps(4) 3s forwards,
-        ${type3} 3s steps(22, end) 6s forwards;
+    .firstly {
+      width: ${firstlyText0.length}ch;
+      animation: ${firstlyWriteAction0} 2.5s steps(22), ${writer} 1s 5 alternate,
+        ${firstlyDeleteAction} 0.5s steps(9) 2.5s,
+        ${firstlyWriteAction1} 1s steps(5) 3s forwards;
+      &::before {
+        content: '${firstlyText0}';
+        animation: ${firstlyWriteAction1} 1s steps(4) 3s forwards;
+      }
+    }
+    .secondary {
+      width: 0;
+      animation: ${writer} 1s 5s infinite alternate,
+        ${secondaryWriteAction} 3s steps(22) 5.5s forwards;
+      &::before {
+        content: '${secondaryText}';
+      }
     }
   }
 `
@@ -82,7 +96,12 @@ const WriteText = () => {
       setAnimate(true)
     }, 100)
   }
-  return <Wrap className={cls({ animate })} onClick={handleClick} />
+  return (
+    <Wrap className={cls({ animate }, 'text-xl')} onClick={handleClick}>
+      <div className="firstly mb-sm"></div>
+      <div className="secondary"></div>
+    </Wrap>
+  )
 }
 
 export default WriteText

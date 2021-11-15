@@ -21,6 +21,14 @@ const theme = {
 
   $HH: '56px',
   $MHH: '40px',
+
+  $T0: 'rgba(0, 0, 0, .85)',
+  $T1: 'rgba(0, 0, 0, .45)',
+  $T2: 'rgba(0, 0, 0, .25)',
+  $T3: 'rgba(0, 0, 0, .15)',
+  $T4: 'rgba(0, 0, 0, .06)',
+  $T5: 'rgba(0, 0, 0, .04)',
+  $T6: 'rgba(0, 0, 0, .02)',
 }
 
 export default theme
