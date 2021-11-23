@@ -20,9 +20,9 @@ tags: Geek
 
 # 搭个架子
 
-vscode 本身是用 Electron 开发的，所以随便来点 node 代码就能作为一个插件使用，只是需要注意 vscode 本身约定的格式。(微软官方有专门的脚手架)[https://github.com/Microsoft/vscode-generator-code]，非常好用，不过对于我来说有点问题，这个之后会讲到，所以这里放弃使用它，改为裸建了一个纯净的项目。
+vscode 本身是用 `Electron` 开发的，所以随便来点 node 代码就能作为一个插件使用，只是需要注意 vscode 本身约定的格式。[微软官方有专门的脚手架](https://github.com/Microsoft/vscode-generator-code)，非常好用，不过对于我来说有点问题，这个之后会讲到，所以这里放弃使用它，改为裸建了一个纯净的项目。
 
-(VSCode 插件开发全攻略)[https://www.cnblogs.com/liuxianan/p/vscode-plugin-overview.html] 这个作者写的很详细，之前 chrome 插件开发也是看的这个作者的入门教程，很赞。
+[VSCode 插件开发全攻略](https://www.cnblogs.com/liuxianan/p/vscode-plugin-overview.html) 这个作者写的很详细，之前 chrome 插件开发也是看的这个作者的入门教程，很赞。
 
 ## package.json
 
@@ -93,7 +93,7 @@ vscode 本身是用 Electron 开发的，所以随便来点 node 代码就能作
 },
 ```
 
-vscode 右侧有个“运行与调试”功能，按 F5 就能出发运行，我们在开发插件时一般会用他作为快捷调试按键，为此我们需要在 .vscode 文件夹下新建文件 `launch.json`
+vscode 右侧有个“运行与调试”功能，按快捷键 F5 就能运行我们制定的脚本，我们在开发插件时一般会用他作为快捷调试按键，为此我们需要在 .vscode 文件夹下新建文件 `launch.json`
 
 ```
 // .vscode/launch.json
@@ -119,7 +119,16 @@ vscode 右侧有个“运行与调试”功能，按 F5 就能出发运行，我
 
 按照设想，首先我们本地有张截图需要需要被插入到 markdown 中，因此我们会先在 Finder/资源管理器中先 ctrl + c 复制这个图片，我们假定它叫 `/Users/July/Download/img1.png`。
 
-然后按照操作习惯我们切回 vscode 正在编写的 markdown 中按下 `ctrl + v`，此时我们需要读取剪切板中的图片内容，将其上传到 SSO，并且备份在本地指定路径，并且得到一个新的 cdn 地址，如 `http://images.cdn.cn/images/hashname.png`，然后将其格式化为 markdown 语法 `![](http://images.cdn.cn/images/hashname.png)`，插入到编辑器光标处。
+然后按照操作习惯我们切回 vscode 正在编写的 markdown 中按下 `ctrl + v`，此时我们需要读取剪切板中的图片内容，将其上传到 SSO，并且备份在本地指定路径，并且得到一个新的 cdn 地址，如
+
+```
+http://images.cdn.cn/images/hashname.png
+```
+
+然后将其格式化为 markdown 语法，插入到编辑器光标处。
+```
+![](http://images.cdn.cn/images/hashname.png)
+```
 
 这一切对于使用者来说是无感知的，似乎就是将一张图片“copy”到了 markdown 中。
 
@@ -184,6 +193,101 @@ export function activate(context: vscode.ExtensionContext) {
 
 ## 剪切板内容
 
+获取系统剪切板内容核心难点是「跨平台」问题，这点光靠 js 是搞不定的。所以我们需要借助 node 去运行不同平台特有的环境脚本来获取系统剪切板内容。
+
+由于目前仅在 mbp 上使用，所以非常鸡贼的只讨论 macOS 的 case。
+
+在 macOS 上我们可以借助「applescript」脚本实现我们想要的功能。[applescript](https://developer.apple.com/library/archive/documentation/AppleScript/Conceptual/AppleScriptLangGuide/introduction/ASLR_intro.html) 据说非常容易上手，然后我非常折磨的才写完了大概内容
+
+比较核心的代码就两行，该代码会返回被复制的图片在磁盘中的路径
+```
+try
+    (item 1 of (clipboard info for «class furl»))
+  return POSIX path of (the clipboard as «class furl»)
+on error
+  ...
+end try
+```
+
+然后我们还需要处理流文件的情况，比如是通过软件的截图而到剪切板的内容，那么它可能不存在磁盘中或者不是确定的格式。因此面对这种情况我们需要把它写入临时文件夹中再返回路径。
+
+```
+set imagePath to (item 1 of argv)
+set theType to getType()
+
+if theType is not missing value then		
+  set myFile to (open for access imagePath with write permission)
+  set eof myFile to 0
+  write (the clipboard as (first item of theType)) to myFile
+  close access myFile
+  return (POSIX path of imagePath)
+else
+  return "no image"
+end if
+```
+
+最后我们通过 spawn 执行脚本，顺便传入自定义的临时文件夹路径。
+
+```
+const ascript = spawn('osascript', [scriptPath, imagePath])
+ascript.on('error', (e: any) => {
+  vscode.window.showErrorMessage(e)
+})
+ascript.stdout.on('data', (data) => {
+  resolve(data.toString().trim().split('\n'))
+})
+```
+
+说句题外话，其实 github 上有很多库具有获取剪切板内容的能力，但对于「图片」来说能做到的仅仅是获得被 copy 的图片名甚至没有详细的文件 path，所以对我们来说是不可用的。
+
 ## 配置常量
 
-## 上传七牛云
+对于插件来说说不得需要给用户一些自定义常量的空间，比如类似 cdn 的 host 等。其实这本身是一件相对简单的事情，站在插件开发者的角度上来说自然而然会想到把配置文件放到 .vscode 的 setting.json 中。
+
+但对于工程项目而言这可能是存在问题的。比如 setting.json 还包含一些需要被共享（上传到 git）的内容。而 cdn 的 host、密钥等显然不适合上传到仓库尤其是开源仓库，而且面对不同的环境可能需要使用不同的变量所以使用`.env.dev`、`.env.prd`显然更加合适。
+
+## 图片上传
+
+从设计上来讲上传分为两步走，一步是复制文件到本地，一步是上传 SSO。从代码上来说都不难，贴一些核心代码
+
+```
+// class Local
+const rootPath = utils.getCurrentRoot()
+const localUrl = path.resolve(rootPath, this.config.localPath, image.hashName)
+const localFolder = path.dirname(localUrl)
+if (!fs.existsSync(localFolder)) {
+  fs.mkdirSync(localFolder)
+}
+fs.copyFileSync(image.path, localUrl)
+
+// class QiniuSSo
+const mac = new qiniu.auth.digest.Mac(this.config.qiniuAccessKey, this.config.qiniuSecretKey)
+const key = this.config.qiniuScope + image.hashName
+const putPolicy = new qiniu.rs.PutPolicy({
+  scope: this.config.qiniuBucket + ":" + key
+})
+const config: qiniu.conf.ConfigOptions = new qiniu.conf.Config
+config.zone = zone
+const formUploader = new qiniu.form_up.FormUploader(config)
+formUploader.putFile(token, key, image.path, new qiniu.form_up.PutExtra(), (err, body, info) => {
+  if (err) {
+    reject(err)
+  }
+  if (info.statusCode === 200) {
+    resolve({
+      ...image,
+      ssoUrl: utils.urlJoin(this.config.host, key)
+    })
+  } else {
+    reject(new Error(body.error))
+  }
+})
+```
+
+# 总结
+
+总的来说对于有 js 基础的开发来说写 vscode 插件并不难，堆代码就完事了。
+
+也会又些比较坑的点，比如使用 tsc 编译 ts 并不会包含 node_modules 的代码，所以需要在 `.vscodeignore` 文件中去掉 node_modules 的忽略，不过因此打出来的包巨大（还是推荐使用打包工具）。
+
+再比如说最后我又一次放弃了七牛云，国内的云约束还是太大。目前就还是打包丢在 vercel 上，不过说实话 vercel cdn 的速度确实不敢恭维，即使在网络质量比较好的情况下也会出现短暂的 css 未加载完成导致的样式错乱问题。

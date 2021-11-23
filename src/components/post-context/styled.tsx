@@ -57,7 +57,7 @@ export const PostHeadStyled: FC<{
     <PostHeadWrap>
       <Container>
         <div className="post-title">{title}</div>
-        <div className="post-sub">「 {sub} 」</div>
+        {Boolean(sub) && <div className="post-sub">「 {sub} 」</div>}
         <div className="post-tips">
           <div className="tip date">
             <AlarmIcon />
