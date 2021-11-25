@@ -6,19 +6,11 @@ import html from 'remark-html'
 import { crateTOCTree, TOCNode } from 'utils'
 
 const postsDirectory = path.join(process.cwd(), 'posts')
-export type PostMeta = {
-  title: string
-  sub: string
-  date: string
-  status: string
-  tags: string
-}
 
 /******************************************************************
  * 获取 post 列表，并且按照 date 排序
  */
-export type PostsData = (PostMeta & { id: string })[]
-export function getPostsData(): PostsData {
+export function getPostsData(): Post[] {
   const fileNames = fs.readdirSync(postsDirectory)
   const postsData = fileNames
     .map(fileName => {
