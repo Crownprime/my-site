@@ -1,7 +1,8 @@
 import { FC } from 'react'
 import styled from 'styled-components'
 import Container from '@/components/layout/container'
-import { AlarmIcon, StyleIcon } from '@/components/icons'
+import { AlarmIcon } from '@/components/icons'
+import { Tags } from '@/components/tag'
 
 const PostHeadWrap = styled.div`
   margin-top: ${props => props.theme.$HH};
@@ -51,7 +52,7 @@ export const PostHeadStyled: FC<{
   title: string
   date: string
   sub?: string
-  tags?: string
+  tags?: string[]
 }> = ({ title, date, sub, tags }) => {
   return (
     <PostHeadWrap>
@@ -63,10 +64,9 @@ export const PostHeadStyled: FC<{
             <AlarmIcon />
             <span>{date}</span>
           </div>
-          {Boolean(tags) && (
+          {Boolean(tags?.length) && (
             <div className="tip tags">
-              <StyleIcon />
-              <span>{tags}</span>
+              <Tags tags={tags} />
             </div>
           )}
         </div>

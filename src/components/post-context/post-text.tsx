@@ -3,12 +3,11 @@ import { head } from 'lodash-es'
 import ReactMarkdown from 'react-markdown'
 import ScrollableAnchor, { configureAnchors } from 'react-scrollable-anchor'
 import PostImage from '@/components/post-image'
-import { PostData, TOCNode } from 'apis/posts'
 import { PostTextStyled } from './styled'
 
 configureAnchors({ offset: -65 })
 
-const PostHtml: FC<{ data: PostData }> = ({ data }) => {
+const PostHtml: FC<{ data: Post }> = ({ data }) => {
   return (
     <ReactMarkdown
       components={{
@@ -40,7 +39,7 @@ const PostHtml: FC<{ data: PostData }> = ({ data }) => {
   )
 }
 
-const PostToc: FC<{ toc: PostData['toc'] }> = ({ toc }) => {
+const PostToc: FC<{ toc: Post['toc'] }> = ({ toc }) => {
   const createTree = (node: TOCNode) => {
     return (
       <li key={node.text}>
@@ -54,7 +53,7 @@ const PostToc: FC<{ toc: PostData['toc'] }> = ({ toc }) => {
   return <ul>{toc.map(t => createTree(t))}</ul>
 }
 
-const PostText: FC<{ data: PostData }> = ({ data }) => {
+const PostText: FC<{ data: Post }> = ({ data }) => {
   return (
     <PostTextStyled
       html={<PostHtml data={data} />}
