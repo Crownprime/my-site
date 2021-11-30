@@ -1,37 +1,38 @@
 import { useRouter } from 'next/router'
-import { ExpandMoreIcon } from '@/components/icons'
 import WriteText from '@/components/write-text'
-import { useViewport } from '@/hooks'
-import styles from './styles.module.scss'
-import { motion, useViewportScroll, useTransform } from 'framer-motion'
+import HoverButton from '@/components/hover-button'
+import styled from 'styled-components'
+
+const CoverStyled = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  .expand {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: ${props => props.theme.$lg};
+  }
+`
 
 const Cover = () => {
   const router = useRouter()
-  const { vh } = useViewport()
-  const { scrollY } = useViewportScroll()
-  const opacity = useTransform(scrollY, [0, vh], [1, 0])
   const handleClick = () => {
     router.push('/category')
   }
   return (
-    <div className={styles.homeCover}>
+    <CoverStyled>
       <WriteText />
-      <div className={styles.homeCoverExpand}>
-        <motion.div
-          className="cursor-pointer"
-          style={{ opacity }}
-          animate={{ y: 10 }}
-          transition={{
-            repeat: Infinity,
-            duration: 2,
-            repeatType: 'reverse',
-          }}
-          onClick={handleClick}
-        >
-          <ExpandMoreIcon />
-        </motion.div>
+      <div className="expand">
+        <HoverButton onClick={handleClick} />
       </div>
-    </div>
+    </CoverStyled>
   )
 }
 

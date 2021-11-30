@@ -1,6 +1,6 @@
 module.exports = {
   mode: 'jit',
-  purge: ['./src/**/*.tsx'],
+  purge: ['./src/**/*.tsx', './stories/**/*.tsx'],
   darkMode: false, // or 'media' or 'class'
   corePlugins: {
     container: false,
@@ -18,6 +18,8 @@ module.exports = {
       },
       $T0: 'rgba(0, 0, 0, .85)',
       $T1: 'rgba(0, 0, 0, .45)',
+      $T2: 'rgba(0, 0, 0, .25)',
+      $T5: 'rgba(0, 0, 0, .04)',
     },
     fontSize: {
       sm: ['12px', '20px'],
@@ -32,6 +34,7 @@ module.exports = {
       '7xl': ['68px', '76px'],
     },
     spacing: {
+      ii: '2px',
       mn: '4px',
       sm: '8px',
       md: '16px',

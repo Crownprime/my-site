@@ -2,7 +2,7 @@
 title: TypeScript 类型谓语
 sub: 如何构造具有断言能力的函数
 date: Tue Oct 12 2021 17:23:00 GMT+0800 (中国标准时间)
-tag: Geek,TypeScript
+tags: Geek,TypeScript
 ---
 
 ts 或许没有我们想象中的那么聪明。

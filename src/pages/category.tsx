@@ -1,26 +1,26 @@
 import React from 'react'
 import { GetStaticProps } from 'next'
-import { getPublishSortedPostsData } from 'apis/posts'
+import { fetchPostsWithPublish } from 'apis'
 import CategoryView from '@/features/category'
 import DocHead from '@/components/doc-head'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 
 export const getStaticProps: GetStaticProps = async () => {
-  const postsData = getPublishSortedPostsData()
+  const posts = fetchPostsWithPublish()
   return {
     props: {
-      postsData,
+      posts,
     },
   }
 }
 
-const CategoryPage: React.FC<{ postsData: Post[] }> = ({ postsData }) => {
+const CategoryPage: React.FC<{ posts: Post[] }> = ({ posts }) => {
   return (
     <div>
       <DocHead title="July's Site" />
       <Header />
-      <CategoryView postsData={postsData} />
+      <CategoryView posts={posts} />
       <Footer />
     </div>
   )

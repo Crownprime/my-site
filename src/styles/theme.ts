@@ -29,6 +29,8 @@ const theme = {
   $T4: 'rgba(0, 0, 0, .06)',
   $T5: 'rgba(0, 0, 0, .04)',
   $T6: 'rgba(0, 0, 0, .02)',
+
+  $W0: 'rgba(255, 255, 255, .85)',
 }
 
 export default theme

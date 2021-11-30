@@ -5,10 +5,10 @@ import DocHead from '@/components/doc-head'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import PostView from '@/features/post'
-import { getPostData, getPostsDataIds, PostData } from 'apis/posts'
+import { fetchPostIds, fetchPostById } from 'apis'
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = getPostsDataIds().map(id => ({ params: { id } }))
+  const paths = fetchPostIds().map(id => ({ params: { id } }))
   return {
     paths,
     fallback: false,
@@ -17,7 +17,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const id = Array.isArray(params.id) ? head(params.id) : params.id
-  const postData = getPostData(id)
+  const postData = fetchPostById(id)
   return {
     props: {
       postData,
