@@ -1,9 +1,8 @@
 import { FC } from 'react'
 import Container from '@/components/layout/container'
-import { PostData } from 'apis/posts'
 import PostText from './post-text'
 
-const PostContext: FC<{ data: PostData }> = ({ data }) => {
+const PostContext: FC<{ data: Post }> = ({ data }) => {
   return (
     <Container>
       <PostText data={data} />
