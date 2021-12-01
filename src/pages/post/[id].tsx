@@ -25,7 +25,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 }
 
-const PostPage: FC<{ postData: PostData }> = ({ postData }) => {
+const PostPage: FC<{ postData: Post }> = ({ postData }) => {
   return (
     <div>
       <DocHead title={postData.title} />

@@ -13,12 +13,6 @@ declare type Post = PostMeta & {
   introduction: string
 }
 
-declare type PostData = PostMeta & {
-  id: string
-  // md 原始字符串
-  content: string
-}
-
 declare type TOCNode = {
   depth: number
   text: string

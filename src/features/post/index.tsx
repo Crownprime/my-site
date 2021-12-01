@@ -1,8 +1,7 @@
 import { FC } from 'react'
 import PostContent, { PostHead } from '@/components/post-context'
-import { PostData } from 'apis/posts'
 
-const PostView: FC<{ data: PostData }> = ({ data }) => {
+const PostView: FC<{ data: Post }> = ({ data }) => {
   return (
     <main>
       <PostHead data={data} />
