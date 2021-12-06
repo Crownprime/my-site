@@ -57,6 +57,9 @@ export const TimeLineStyled = styled.div`
           flex-shrink: 1;
           padding-right: ${props => props.theme.$md};
           color: ${props => props.theme.$T0};
+          & > span:hover {
+            text-decoration: underline;
+          }
         }
         .date {
           flex-grow: 0;
