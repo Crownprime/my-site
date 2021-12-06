@@ -34,7 +34,6 @@ specifiers:
   next-transpile-modules: ^8.0.0
   node-sass: ^5.0.0
   postcss: ^8.3.6
-  postcss-100vh-fix: ^1.0.2
   prettier: ^2.3.2
   react: 17.0.2
   react-dom: 17.0.2
@@ -94,7 +93,6 @@ devDependencies:
   eslint-plugin-react: 7.27.1_eslint@7.32.0
   next-transpile-modules: 8.0.0
   postcss: 8.4.4
-  postcss-100vh-fix: 1.0.2_postcss@8.4.4
   prettier: 2.5.0
   tailwindcss: 2.2.19_6b4e3d148bdcb715d5f821ed0a9c268b
   tsconfig-paths-webpack-plugin: 3.5.2
@@ -10969,15 +10967,6 @@ packages:
   /posix-character-classes/0.1.1:
     resolution: {integrity: sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=}
     engines: {node: '>=0.10.0'}
-    dev: true
-
-  /postcss-100vh-fix/1.0.2_postcss@8.4.4:
-    resolution: {integrity: sha512-t7vqk9AfjI4fXmWlQCEiMZFFhi1hro4WlECINI1TV6Qh1XapUJE++gCmNr95F5Hen/+bz1OmO+SiSB9TZmFmSg==}
-    engines: {node: '>=10.0'}
-    peerDependencies:
-      postcss: ^8.1.0
-    dependencies:
-      postcss: 8.4.4
     dev: true
 
   /postcss-flexbugs-fixes/4.2.1:
