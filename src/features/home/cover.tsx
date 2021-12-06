@@ -5,7 +5,6 @@ import styled from 'styled-components'
 
 const CoverStyled = styled.div`
   width: 100%;
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,7 +26,7 @@ const Cover = () => {
     router.push('/category')
   }
   return (
-    <CoverStyled>
+    <CoverStyled className="h-screen">
       <WriteText />
       <div className="expand">
         <HoverButton onClick={handleClick} />
