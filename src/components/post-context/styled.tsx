@@ -79,6 +79,7 @@ const PostTextWrap = styled.div`
   display: flex;
   align-items: flex-start;
   .post-text-html {
+    width: 100%;
     h1 {
       color: ${props => props.theme.$N800};
       font-size: 18px;
