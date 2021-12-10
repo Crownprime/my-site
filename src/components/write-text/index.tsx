@@ -1,107 +1,183 @@
-import { useRef, useState } from 'react'
-import styled, { keyframes } from 'styled-components'
-import cls from 'classnames'
+import { useState } from 'react'
+import styled from 'styled-components'
+import { animated, useSpring, SpringRef } from 'react-spring'
 
-const writer = keyframes`
-  50% {
-    border-color: rgba(0, 0, 0, .85);
-  }
-`
+// write word 动作在一帧中所占比例（剩余时间即为停顿时间）
+const WRITE_TIMING = 0.1
+// 根据帧头、帧尾，得到本帧 write action 完成的时间
+const getWriteTime = (prev: number, next: number) => {
+  return prev + (next - prev) * WRITE_TIMING
+}
 
-const firstlyCommonText = 'Hello, I am J'
-// 第一次写出的字符串
-const firstlyText0 = firstlyCommonText + 'iangXujin'
-const firstlyText1 = firstlyCommonText + 'uly. '
+// 获得时间轴
+const FRAME_LEN = 1
+const FRAME_ECHO_LEN = 1
+const FRAME_SLEEP = 3
+type Mode = 'w' | 'd' | 's'
+type GetWriteTimeLine = (
+  prev: number,
+  next: number,
+  mode?: Mode,
+  last?: number,
+) => {
+  range: number[]
+  echo: number[]
+  last: number
+}
+const getWriteTimeLine: GetWriteTimeLine = (
+  prev,
+  next,
+  mode = 'w',
+  last = 0,
+) => {
+  const range: number[] = []
+  const echo: number[] = []
+  let nLast = last
+  const getLast = (i: number, mode: Mode) => {
+    switch (mode) {
+      case 'w':
+        return i + FRAME_ECHO_LEN
+      case 'd':
+        return i - FRAME_ECHO_LEN
+      case 's':
+        return i
+    }
+  }
+  for (let k = prev; k < next; k++) {
+    range.push(k, getWriteTime(k, k + FRAME_LEN))
+    echo.push(nLast, (nLast = getLast(nLast, mode)))
+  }
+  return {
+    range,
+    echo,
+    last: nLast,
+  }
+}
 
-const secondaryText = 'Welcome to my Website! '
-// 1.先写下字符串 firstlyText0
-const firstlyWriteAction0 = keyframes`
-  from {
-    width: 0;
+type Action = (prev: number) => { end: number; mode: Mode }
+const timeGenerator = (actions: Action[]) => {
+  let prev = 0,
+    step = null
+  const range = [],
+    echo = [],
+    history = [prev]
+  actions.forEach(action => {
+    const { end, mode } = action(prev)
+    step = getWriteTimeLine(prev, end, mode, step?.last || 0)
+    range.push(...step.range)
+    echo.push(...step.echo)
+    history.push(end)
+    prev = end
+  })
+  range.push(prev)
+  echo.push(step.last)
+  return {
+    range,
+    echo,
+    history,
+    last: prev,
   }
-  to {
-    width: ${firstlyText0.length}ch;
-  }
-`
-// 2.删减长度到 firstlyCommonText
-const firstlyDeleteAction = keyframes`
-  from {
-    width: ${firstlyText0.length}ch;
-  }
-  to {
-    width: ${firstlyCommonText.length}ch;
-  }
-`
-// 3. 增加长度到 firstlyText1
-const firstlyWriteAction1 = keyframes`
-  from {
-    width: ${firstlyCommonText.length}ch;;
-    content: "${firstlyText1}";
-  }
-  to {
-    width: ${firstlyText1.length}ch;
-    content: "${firstlyText1}";
-  }
-`
+}
 
-const secondaryWriteAction = keyframes`
-  from {
-    width: 0
+const getCommon = (words1: string, words2 = '') => {
+  const arr1 = words1.split('')
+  const arr2 = words2.split('')
+  const minLen = Math.min(arr1.length, arr2.length)
+  let i = 0
+  while (i < minLen) {
+    if (arr1[i] !== arr2[i]) {
+      break
+    }
+    i++
   }
-  to {
-    width: ${secondaryText.length}ch
-  }
-`
+  return i
+}
 
-const Wrap = styled.div`
-  width: 300px;
-  font-family: monospace;
-  cursor: pointer;
-  color: ${props => props.theme.$T0};
-  .firstly,
-  .secondary {
-    border-right: 0.1em solid transparent;
+const WriteTextWrap = styled.span`
+  display: flex;
+  align-items: center;
+  .text {
+    color: ${props => props.theme.$T0};
     overflow: hidden;
     white-space: nowrap;
-  }
-  &.animate {
-    .firstly {
-      width: ${firstlyText0.length}ch;
-      animation: ${firstlyWriteAction0} 2.5s steps(22), ${writer} 1s 5 alternate,
-        ${firstlyDeleteAction} 0.5s steps(9) 2.5s,
-        ${firstlyWriteAction1} 1s steps(5) 3s forwards;
-      &::before {
-        content: '${firstlyText0}';
-        animation: ${firstlyWriteAction1} 1s steps(4) 3s forwards;
-      }
-    }
-    .secondary {
-      width: 0;
-      animation: ${writer} 1s 5s infinite alternate,
-        ${secondaryWriteAction} 3s steps(22) 5.5s forwards;
-      &::before {
-        content: '${secondaryText}';
-      }
-    }
+    width: 0;
+    font-family: monospace;
   }
 `
-
-const WriteText = () => {
-  const [animate, setAnimate] = useState(true)
-  const timeRef = useRef<NodeJS.Timeout | 0>(0)
-  const handleClick = () => {
-    setAnimate(false)
-    timeRef.current && clearTimeout(timeRef.current)
-    timeRef.current = setTimeout(() => {
-      setAnimate(true)
-    }, 100)
+const WriteText: React.FC<{
+  prime: string
+  final?: string
+  aRef?: SpringRef
+  isEndWhenFinish?: boolean
+}> = ({ prime, final, isEndWhenFinish, aRef }) => {
+  const common = getCommon(prime, final)
+  const del = prime.length - common
+  const add = final ? final.length - common : 0
+  const actions: Action[] = [
+    prev => ({ end: prev + FRAME_SLEEP, mode: 's' }),
+    prev => ({ end: prev + prime.length, mode: 'w' }),
+  ]
+  if (final) {
+    actions.push(
+      ...([
+        prev => ({ end: prev + FRAME_SLEEP, mode: 's' }),
+        prev => ({ end: prev + del, mode: 'd' }),
+        prev => ({ end: prev + FRAME_SLEEP, mode: 's' }),
+        prev => ({ end: prev + add, mode: 'w' }),
+        prev => ({ end: prev + FRAME_SLEEP, mode: 's' }),
+      ] as Action[]),
+    )
   }
+  const { range, echo: output, last, history } = timeGenerator(actions)
+
+  const [words, setWords] = useState(prime)
+  const [cursor, setCursor] = useState(false)
+  const { width } = useSpring({
+    config: { duration: last * 150 },
+    from: { width: 0 },
+    to: { width: last },
+    ref: aRef,
+    onStart() {
+      setCursor(true)
+    },
+    onChange({ value }) {
+      if (Math.floor(value.width) === history[4]) {
+        setWords(final)
+      }
+      if (value.width === last) {
+        if (isEndWhenFinish) {
+          setCursor(false)
+        }
+      }
+    },
+  })
   return (
-    <Wrap className={cls({ animate }, 'text-xl')} onClick={handleClick}>
-      <div className="firstly mb-sm"></div>
-      <div className="secondary"></div>
-    </Wrap>
+    <WriteTextWrap>
+      <animated.div
+        className="text text-xl"
+        style={{ width: width.to({ range, output }).to(w => `${w}ch`) }}
+      >
+        {words}
+      </animated.div>
+      {cursor && <Cursor />}
+    </WriteTextWrap>
   )
+}
+
+const CursorWrap = styled(animated.div)`
+  width: 0.1em;
+  height: 20px;
+  background: ${props => props.theme.$T0};
+`
+
+const Cursor = () => {
+  const style = useSpring({
+    loop: true,
+    config: { duration: 800 },
+    from: { opacity: 1 },
+    to: { opacity: 0 },
+  })
+  return <CursorWrap style={style} />
 }
 
 export default WriteText
