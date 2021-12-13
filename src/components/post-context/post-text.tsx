@@ -13,7 +13,7 @@ const PostHtml: FC<{ data: Post }> = ({ data }) => {
       components={{
         img({ src, alt }) {
           return (
-            <div className="w-full h-[200px]">
+            <div className="w-full max-h-[200px]">
               <PostImage src={src} alt={alt} />
             </div>
           )
