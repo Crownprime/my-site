@@ -1,14 +1,24 @@
-import { LoyaltyIcon } from '@/components/icons'
+import { LoyaltyIcon, AlarmIcon } from '@/components/icons'
 import styled from 'styled-components'
 
-const Tag = ({ text }: { text: string }) => {
+export const Tag: React.FC<{
+  text?: string
+  icon?: JSX.Element
+}> = ({ text, icon }) => {
   return (
-    <span className="tag text-sm text-$T0 hover:bg-$T5 px-mn py-ii rounded cursor-pointer">
-      <LoyaltyIcon />
+    <span className="tag text-sm text-$T0 hover:bg-$T5 px-mn py-ii rounded cursor-pointer inline-flex items-center">
+      {icon}
       <span className="ml-mn">{text}</span>
     </span>
   )
 }
+
+export const DateTag = ({ text }: { text: string }) => (
+  <Tag text={text} icon={<AlarmIcon />} />
+)
+export const MarkTag = ({ text }: { text: string }) => (
+  <Tag text={text} icon={<LoyaltyIcon />} />
+)
 
 const TagsStyled = styled.div`
   display: inline-flex;
@@ -17,14 +27,6 @@ const TagsStyled = styled.div`
   }
 `
 
-export const Tags = ({ tags }: { tags: string[] }) => {
-  return (
-    <TagsStyled>
-      {tags.map(t => (
-        <Tag text={t} key={t} />
-      ))}
-    </TagsStyled>
-  )
-}
+export const TagSpace = TagsStyled
 
 export default Tag

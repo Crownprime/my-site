@@ -1,8 +1,7 @@
 import { FC } from 'react'
 import styled from 'styled-components'
 import Container from '@/components/layout/container'
-import { AlarmIcon } from '@/components/icons'
-import { Tags } from '@/components/tag'
+import { TagSpace, MarkTag, DateTag } from '@/components/tag'
 
 const PostHeadWrap = styled.div`
   margin-top: ${props => props.theme.$HH};
@@ -21,29 +20,11 @@ const PostHeadWrap = styled.div`
     margin-top: ${props => props.theme.$md};
   }
   .post-tips {
-    font-size: 14px;
-    line-height: 24px;
-    color: ${props => props.theme.$N400};
     margin-top: ${props => props.theme.$md};
     display: flex;
     align-items: center;
     .tip {
       margin-right: ${props => props.theme.$lg};
-    }
-    .tip span {
-      margin-left: ${props => props.theme.$sm};
-    }
-    .tip.tags {
-      position: relative;
-      &::before {
-        position: absolute;
-        left: -15px;
-        top: 5px;
-        content: '';
-        width: 1px;
-        height: 14px;
-        background: ${props => props.theme.$N400};
-      }
     }
   }
 `
@@ -61,12 +42,15 @@ export const PostHeadStyled: FC<{
         {Boolean(sub) && <div className="post-sub">「 {sub} 」</div>}
         <div className="post-tips">
           <div className="tip date">
-            <AlarmIcon />
-            <span>{date}</span>
+            <DateTag text={date} />
           </div>
           {Boolean(tags?.length) && (
             <div className="tip tags">
-              <Tags tags={tags} />
+              <TagSpace>
+                {tags.map(tag => (
+                  <MarkTag key={tag} text={tag} />
+                ))}
+              </TagSpace>
             </div>
           )}
         </div>

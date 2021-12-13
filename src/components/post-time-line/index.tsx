@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 import Link from 'next/link'
 import Container from '@/components/layout/container'
-import { Tags } from '@/components/tag'
+import { TagSpace, MarkTag, DateTag } from '@/components/tag'
 import { getYearByTimestamp, getMonthAndDayByTimestamp } from '@/lib'
+import { NUM_2_ZH } from '@/constants'
 import { TimeLineStyled } from './styled'
 
 const PostTimePoint: React.FC<{ post: Post }> = ({ post }) => {
@@ -14,8 +15,8 @@ const PostTimePoint: React.FC<{ post: Post }> = ({ post }) => {
             <Link href={'/post/' + post.id}>{post.title}</Link>
           </span>
         </div>
-        <span className="date text-base text-$T1">
-          {getMonthAndDayByTimestamp(post.date)}
+        <span className="date">
+          <DateTag text={getMonthAndDayByTimestamp(post.date)} />
         </span>
       </div>
       <div className="hide-content pl-sm pt-sm">
@@ -24,15 +25,33 @@ const PostTimePoint: React.FC<{ post: Post }> = ({ post }) => {
             「{post.sub}」
           </div>
         )}
-        <div className="text-$T1 text-base">{post.introduction}</div>
+        <div className="text-$T1 text-base introduction">
+          {post.introduction}
+        </div>
         {Boolean(post.tags?.length) && (
-          <div>
-            <Tags tags={post.tags} />
+          <div className="mt-mn">
+            <TagSpace>
+              {post.tags.map(tag => (
+                <MarkTag key={tag} text={tag} />
+              ))}
+            </TagSpace>
           </div>
         )}
       </div>
     </div>
   )
+}
+
+const YearBlock: React.FC<{ year: string }> = ({ year }) => {
+  const echoYear = useMemo(
+    () =>
+      year
+        .split('')
+        .map(i => NUM_2_ZH[i] || i)
+        .join(''),
+    [year],
+  )
+  return <div className="year text-xl">{echoYear}</div>
 }
 
 const YearTimePoint: React.FC<{
@@ -41,9 +60,7 @@ const YearTimePoint: React.FC<{
 }> = ({ year, data }) => {
   return (
     <TimeLineStyled>
-      <div className="year">
-        <span className="text-xl font-medium">{year}</span>
-      </div>
+      <YearBlock year={year} />
       <div className="posts">
         {data.map(p => (
           <PostTimePoint post={p} key={p.id} />

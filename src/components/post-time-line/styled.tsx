@@ -14,11 +14,10 @@ export const TimeLineStyled = styled.div`
     left: -1px;
   }
   .year {
-    width: 100px;
-    text-align: right;
-    color: ${props => props.theme.$T1};
+    color: ${props => props.theme.$T0};
     position: relative;
-    padding-right: ${props => props.theme.$lg};
+    padding-left: ${props => props.theme.$lg};
+    font-weight: 500;
     &::after {
       content: '';
       width: 12px;
@@ -65,6 +64,13 @@ export const TimeLineStyled = styled.div`
           flex-grow: 0;
           flex-shrink: 0;
         }
+      }
+      .introduction {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
       }
     }
   }
