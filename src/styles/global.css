@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
@@ -7,7 +11,6 @@ body {
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgba(0, 0, 0, .02);
 }
 
 * {
@@ -19,7 +22,7 @@ body {
   margin: 0 auto;
 }
 
-.icon {
+svg.icon {
   display: inline-block;
   width: 1em; height: 1em;
   vertical-align: -0.15em;
@@ -27,16 +30,7 @@ body {
   overflow: hidden;
 }
 
-.cursor-pointer {
-  cursor: pointer;
-}
-
-@keyframes skeleton-loading {
-  to {
-    background-position-x: 200%;
-  }
-}
-
+/* 兼容 IOS Safari 100vh 出现滚动条问题 */
 @supports (-webkit-touch-callout: none) {
   .h-screen {
     height: -webkit-fill-available;

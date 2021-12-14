@@ -21,10 +21,8 @@ const PostHeadWrap = styled.div`
   }
   .post-tips {
     margin-top: ${props => props.theme.$md};
-    display: flex;
-    align-items: center;
     .tip {
-      margin-right: ${props => props.theme.$lg};
+      margin-top: ${props => props.theme.$mn};
     }
   }
 `

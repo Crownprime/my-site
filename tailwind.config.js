@@ -1,21 +1,13 @@
 module.exports = {
   mode: 'jit',
-  purge: ['./src/**/*.tsx', './stories/**/*.tsx'],
-  darkMode: false, // or 'media' or 'class'
+  content: ['./src/**/*.tsx', './stories/**/*.tsx'],
+  media: false,
   corePlugins: {
     container: false,
   },
   theme: {
     extend: {},
     colors: {
-      N: {
-        0: '#ffffff',
-        50: '#F9FAFB',
-        500: '#8f959e',
-        700: '#374151',
-        800: '#1F2937',
-        900: '#111827',
-      },
       $T0: 'rgba(0, 0, 0, .85)',
       $T1: 'rgba(0, 0, 0, .45)',
       $T2: 'rgba(0, 0, 0, .25)',

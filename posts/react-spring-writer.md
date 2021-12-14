@@ -1,5 +1,5 @@
 ---
-title: React-spring 编程体验
+title: React-Spring 编程体验
 date: Tue Dec 07 2021 19:46:00 GMT+0800 (中国标准时间)
 tags: Geek,React,React-Spring
 ---
@@ -11,7 +11,7 @@ tags: Geek,React,React-Spring
 
 ![图片](/images/2ddf3b8dedde6d078c2b074098b7b41b43ec3c51e57a5d790035f0c9f9e75baa.gif)
 
-但万变不离其宗，其核心原理就是利用变化的 width 和 overflow: hidden 隐藏还未被“打”出的文字，因此我们可以把骨架代码完成
+但万变不离其宗，其核心原理就是利用变化的 `width` 和 `overflow: hidden` 隐藏还未被“打”出的文字，因此我们可以把骨架代码完成
 
 ```
 const WriteTextWrap = styled.div`

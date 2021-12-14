@@ -9,8 +9,6 @@ const theme = {
   $N700: '#374151',
   $N800: '#1F2937',
 
-  $I050: '#EEF2FF',
-
   $mini: '4px',
   $mn: '4px',
   $sm: '8px',
@@ -31,6 +29,9 @@ const theme = {
   $T6: 'rgba(0, 0, 0, .02)',
 
   $W0: 'rgba(255, 255, 255, .85)',
+
+  $RP0: 'rgba(182, 91, 70, .85)',
+  $RP1: 'rgba(182, 91, 70, .45)',
 }
 
 export default theme
