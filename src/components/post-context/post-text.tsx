@@ -12,11 +12,7 @@ const PostHtml: FC<{ data: Post }> = ({ data }) => {
     <ReactMarkdown
       components={{
         img({ src, alt }) {
-          return (
-            <div className="w-full max-h-[200px]">
-              <PostImage src={src} alt={alt} />
-            </div>
-          )
+          return <PostImage src={src} alt={alt} />
         },
         h1({ children }) {
           return (

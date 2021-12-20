@@ -32,8 +32,11 @@ const PostImage: FC<ImageProps> = props => {
     setPreview(val)
   }
   return (
-    <div className="relative w-full h-full" onClick={() => handleClick(true)}>
-      <Image {...props} layout="fill" objectFit="contain" />
+    <div
+      className="relative flex justify-center"
+      onClick={() => handleClick(true)}
+    >
+      <Image {...props} width="700" height="200" objectFit="contain" />
       {preview && (
         <ImagePreview {...props} onClose={() => handleClick(false)} />
       )}
