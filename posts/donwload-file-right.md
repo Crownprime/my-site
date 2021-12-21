@@ -84,7 +84,7 @@ const fileDownload = (url: string) => {
 
 因此我们还需要增加一个能力，通过后端获得正确的文件名并且重命名到下载文件上。
 
-当 http 请求内容为附件时通常会具备 content-disposition 这个响应头，我们可以在{有关他的说明文档}(https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Disposition)中找到该头的意义。
+当 http 请求内容为附件时通常会具备 content-disposition 这个响应头，我们可以在[有关他的说明文档](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Disposition)中找到该头的意义。
 
 > 在常规的 HTTP 应答中，`Content-Disposition` 响应头指示回复的内容该以何种形式展示，是以**内联**的形式（即网页或者页面的一部分），还是以**附件**的形式下载并保存到本地。
 

@@ -1,6 +1,7 @@
 import { forwardRef } from 'react'
 import styled from 'styled-components'
 import Container from '@/components/layout/container'
+import { HEADER_HEIGHT } from '@/constants/header'
 
 export const MenuItemStyled = forwardRef<
   HTMLDivElement,
@@ -23,7 +24,7 @@ const HeaderWrap = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: ${props => props.theme.$HH};
+  height: ${HEADER_HEIGHT}px;
   background: ${props => props.theme.$W0};
   box-shadow: 0 0 ${props => props.theme.$mn} 0 ${props => props.theme.$T2};
   z-index: 10;

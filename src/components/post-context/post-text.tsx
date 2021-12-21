@@ -1,11 +1,14 @@
 import { FC } from 'react'
+import cls from 'classnames'
 import { head } from 'lodash-es'
 import ReactMarkdown from 'react-markdown'
-import ScrollableAnchor, { configureAnchors } from 'react-scrollable-anchor'
+import { configureAnchors } from 'react-scrollable-anchor'
 import PostImage from '@/components/post-image'
-import { PostTextStyled } from './styled'
+import { Anchor, useAnchor, AnchorContext } from '@/components/post-toc'
+import { HEADER_HEIGHT } from '@/constants/header'
+import { PostTextWrap } from './styled'
 
-configureAnchors({ offset: -65 })
+configureAnchors({ offset: -(HEADER_HEIGHT + 20) })
 
 const PostHtml: FC<{ data: Post }> = ({ data }) => {
   return (
@@ -16,16 +19,16 @@ const PostHtml: FC<{ data: Post }> = ({ data }) => {
         },
         h1({ children }) {
           return (
-            <ScrollableAnchor id={head(children as string[])}>
+            <Anchor id={head(children as string[])}>
               <h1>{head(children)}</h1>
-            </ScrollableAnchor>
+            </Anchor>
           )
         },
         h2({ children }) {
           return (
-            <ScrollableAnchor id={head(children as string[])}>
+            <Anchor id={head(children as string[])}>
               <h2>{head(children)}</h2>
-            </ScrollableAnchor>
+            </Anchor>
           )
         },
       }}
@@ -36,25 +39,38 @@ const PostHtml: FC<{ data: Post }> = ({ data }) => {
 }
 
 const PostToc: FC<{ toc: Post['toc'] }> = ({ toc }) => {
-  const createTree = (node: TOCNode) => {
-    return (
-      <li key={node.text}>
-        <a href={'#' + node.text}>{node.text}</a>
-        {Boolean(node.children.length) && (
-          <ul>{node.children.map(n => createTree(n))}</ul>
-        )}
-      </li>
-    )
-  }
-  return <ul>{toc.map(t => createTree(t))}</ul>
+  const { id } = useAnchor()
+  return (
+    <ul className="pl-md">
+      {toc.map(t => (
+        <li key={t.text}>
+          <a
+            href={'#' + t.text}
+            className={cls('inline-block mb-sm text-$T0 hover:text-$PR0', {
+              active: id === t.text,
+            })}
+          >
+            {t.text}
+          </a>
+          {Boolean(t.children.length) && <PostToc toc={t.children} />}
+        </li>
+      ))}
+    </ul>
+  )
 }
 
 const PostText: FC<{ data: Post }> = ({ data }) => {
   return (
-    <PostTextStyled
-      html={<PostHtml data={data} />}
-      toc={<PostToc toc={data.toc} />}
-    />
+    <PostTextWrap>
+      <AnchorContext.Provider>
+        <div className="post-text-html">
+          <PostHtml data={data} />
+        </div>
+        <div className="post-text-toc text-base pl-md sticky flex-shrink-0">
+          <PostToc toc={data.toc} />
+        </div>
+      </AnchorContext.Provider>
+    </PostTextWrap>
   )
 }
 

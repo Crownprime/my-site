@@ -12,6 +12,8 @@ module.exports = {
       $T1: 'rgba(0, 0, 0, .45)',
       $T2: 'rgba(0, 0, 0, .25)',
       $T5: 'rgba(0, 0, 0, .04)',
+
+      $PR0: 'rgba(182, 91, 70, .85)',
     },
     fontSize: {
       sm: ['12px', '20px'],

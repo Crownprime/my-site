@@ -2,9 +2,10 @@ import { FC } from 'react'
 import styled from 'styled-components'
 import Container from '@/components/layout/container'
 import { TagSpace, MarkTag, DateTag } from '@/components/tag'
+import { HEADER_HEIGHT } from '@/constants/header'
 
 const PostHeadWrap = styled.div`
-  margin-top: ${props => props.theme.$HH};
+  margin-top: ${HEADER_HEIGHT}px;
   padding-top: ${props => props.theme.$md};
   .post-title {
     font-size: 30px;
@@ -57,7 +58,7 @@ export const PostHeadStyled: FC<{
   )
 }
 
-const PostTextWrap = styled.div`
+export const PostTextWrap = styled.div`
   display: flex;
   align-items: flex-start;
   .post-text-html {
@@ -161,23 +162,21 @@ const PostTextWrap = styled.div`
   }
   .post-text-toc {
     width: 200px;
-    flex-shrink: 0;
-    position: sticky;
-    top: ${props => props.theme.$HH};
-    padding-left: ${props => props.theme.$md};
-    li {
-      margin-bottom: 8px;
-      a {
-        font-size: 14px;
-        padding: 6px;
-        color: ${props => props.theme.$N700};
-        &:hover {
-          color: ${props => props.theme.$N800};
+    top: ${HEADER_HEIGHT + 20}px;
+    li > a {
+      &.active {
+        position: relative;
+        &::before {
+          content: '';
+          position: absolute;
+          width: ${props => props.theme.$mn};
+          height: 80%;
+          background: ${props => props.theme.$RP0};
+          top: 0;
+          left: -${props => props.theme.$sm};
+          transform: translateY(10%);
         }
       }
-    }
-    ul {
-      padding-left: 12px;
     }
   }
   @media screen and (max-width: 1040px) {
@@ -186,15 +185,3 @@ const PostTextWrap = styled.div`
     }
   }
 `
-
-export const PostTextStyled: FC<{
-  html: JSX.Element
-  toc: JSX.Element
-}> = ({ html, toc }) => {
-  return (
-    <PostTextWrap>
-      <div className="post-text-html">{html}</div>
-      <div className="post-text-toc">{toc}</div>
-    </PostTextWrap>
-  )
-}

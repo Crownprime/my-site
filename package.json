@@ -16,7 +16,7 @@
     "dayjs": "^1.10.7",
     "gray-matter": "^4.0.3",
     "lodash-es": "^4.17.21",
-    "next": "^12.0.4",
+    "next": "^12.0.7",
     "node-sass": "^5.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -25,6 +25,7 @@
     "react-spring": "^9.3.0",
     "remark": "^14.0.1",
     "remark-html": "^15.0.0",
+    "sharp": "^0.29.3",
     "styled-components": "^5.3.0",
     "swr": "^1.0.1"
   },

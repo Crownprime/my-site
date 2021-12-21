@@ -9,6 +9,7 @@ const theme = {
   $N700: '#374151',
   $N800: '#1F2937',
 
+  $ii: '2px',
   $mini: '4px',
   $mn: '4px',
   $sm: '8px',
