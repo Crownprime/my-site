@@ -6,6 +6,7 @@ import { configureAnchors } from 'react-scrollable-anchor'
 import PostImage from '@/components/post-image'
 import { Anchor, useAnchor, AnchorContext } from '@/components/post-toc'
 import { HEADER_HEIGHT } from '@/constants/header'
+import { PreTarget, CodeTarget } from '@/components/post-target'
 import { PostTextWrap } from './styled'
 
 configureAnchors({ offset: -(HEADER_HEIGHT + 20) })
@@ -31,6 +32,8 @@ const PostHtml: FC<{ data: Post }> = ({ data }) => {
             </Anchor>
           )
         },
+        pre: PreTarget,
+        // code: CodeTarget,
       }}
     >
       {data.content}

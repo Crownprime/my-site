@@ -13,6 +13,7 @@ specifiers:
   '@storybook/react': ^6.3.12
   '@types/lodash-es': ^4.17.5
   '@types/node': ^16.6.2
+  '@types/prismjs': ^1.16.6
   '@types/react': ^17.0.19
   '@types/react-scrollable-anchor': ^0.6.1
   '@types/styled-components': ^5.1.12
@@ -35,6 +36,7 @@ specifiers:
   node-sass: ^5.0.0
   postcss: ^8.3.6
   prettier: ^2.3.2
+  prismjs: ^1.25.0
   react: 17.0.2
   react-dom: 17.0.2
   react-markdown: ^7.0.1
@@ -58,6 +60,7 @@ dependencies:
   lodash-es: 4.17.21
   next: 12.0.7_fd8567a9d64e41b60e76b78170c9f2c0
   node-sass: 5.0.0
+  prismjs: 1.25.0
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-markdown: 7.1.1_cfedea9b3ed0faf0dded75c187406c5e
@@ -81,6 +84,7 @@ devDependencies:
   '@storybook/react': 6.4.1_82b436b97812486862271b7f63f9c71e
   '@types/lodash-es': 4.17.5
   '@types/node': 16.11.11
+  '@types/prismjs': 1.16.6
   '@types/react': 17.0.37
   '@types/react-scrollable-anchor': 0.6.1
   '@types/styled-components': 5.1.16
@@ -4136,6 +4140,10 @@ packages:
 
   /@types/pretty-hrtime/1.0.1:
     resolution: {integrity: sha512-VjID5MJb1eGKthz2qUerWT8+R4b9N+CHvGCzg9fn4kWZgaF9AhdYikQio3R7wV8YY1NsQKPaCwKz1Yff+aHNUQ==}
+    dev: true
+
+  /@types/prismjs/1.16.6:
+    resolution: {integrity: sha512-dTvnamRITNqNkqhlBd235kZl3KfVJQQoT5jkXeiWSBK7i4/TLKBNLV0S1wOt8gy4E2TY722KLtdmv2xc6+Wevg==}
     dev: true
 
   /@types/prop-types/15.7.4:
@@ -11246,7 +11254,6 @@ packages:
 
   /prismjs/1.25.0:
     resolution: {integrity: sha512-WCjJHl1KEWbnkQom1+SzftbtXMKQoezOCYs5rECqMN+jP+apI7ftoflyqigqzopSO3hMhTEb0mFClA8lkolgEg==}
-    dev: true
 
   /process-nextick-args/2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}

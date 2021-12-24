@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export const useInView = (): [React.MutableRefObject<HTMLElement>, boolean] => {
   const ref = useRef()
@@ -7,7 +7,7 @@ export const useInView = (): [React.MutableRefObject<HTMLElement>, boolean] => {
     setIsView(Boolean(entries[0]?.isIntersecting))
   }, [])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const ios = new IntersectionObserver(cb)
     if (ref.current) {
       ios.observe(ref.current)

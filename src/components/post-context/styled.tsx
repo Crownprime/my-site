@@ -118,22 +118,6 @@ export const PostTextWrap = styled.div`
         padding: 0 4px;
       }
     }
-    code {
-      font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-        DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-    }
-    pre {
-      background: ${props => props.theme.$N800};
-      border-radius: ${props => props.theme.$mn};
-      padding: ${props => props.theme.$sm};
-      width: 100%;
-      overflow-x: auto;
-      margin: ${props => props.theme.$md} 0;
-      code {
-        color: ${props => props.theme.$N300};
-        font-size: 14px;
-      }
-    }
     blockquote {
       border-left: 2px solid #8f959e;
       padding-left: 8px;

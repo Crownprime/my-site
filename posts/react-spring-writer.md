@@ -13,7 +13,7 @@ tags: Geek,React,React-Spring
 
 但万变不离其宗，其核心原理就是利用变化的 `width` 和 `overflow: hidden` 隐藏还未被“打”出的文字，因此我们可以把骨架代码完成
 
-```
+```tsx
 const WriteTextWrap = styled.div`
   overflow: hidden;
   white-space: nowrap;
