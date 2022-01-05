@@ -64,7 +64,7 @@ export const PostTextWrap = styled.div`
   .post-text-html {
     width: 100%;
     h1 {
-      color: ${props => props.theme.$N800};
+      color: ${props => props.theme.$T0};
       font-size: 18px;
       line-height: 26px;
       padding-bottom: ${props => props.theme.$mn};
@@ -73,7 +73,7 @@ export const PostTextWrap = styled.div`
       border-bottom: 1px dashed ${props => props.theme.$N300};
       &::before {
         content: '#';
-        color: ${props => props.theme.$N400};
+        color: ${props => props.theme.$RP0};
         padding-right: ${props => props.theme.$sm};
       }
     }
@@ -84,7 +84,7 @@ export const PostTextWrap = styled.div`
       margin: ${props => props.theme.$lg} 0 ${props => props.theme.$md} 0;
       &::before {
         content: '##';
-        color: ${props => props.theme.$N400};
+        color: ${props => props.theme.$RP0};
         padding-right: ${props => props.theme.$sm};
       }
     }
@@ -94,17 +94,16 @@ export const PostTextWrap = styled.div`
       margin: ${props => props.theme.$md} 0 ${props => props.theme.$mn} 0;
       &::before {
         content: '###';
-        color: ${props => props.theme.$N400};
+        color: ${props => props.theme.$RP0};
         padding-right: ${props => props.theme.$sm};
       }
     }
     p {
       font-size: 16px;
-      line-height: 30px;
-      font-weight: 400;
-      margin-top: 16px;
-      margin-bottom: 16px;
-      color: ${props => props.theme.$N800};
+      line-height: 24px;
+      margin-top: 12px;
+      margin-bottom: 12px;
+      color: ${props => props.theme.$T0};
       letter-spacing: 0.02em;
       > code {
         background: ${props => props.theme.$N800};
@@ -119,27 +118,30 @@ export const PostTextWrap = styled.div`
       }
     }
     blockquote {
-      border-left: 2px solid #8f959e;
+      border-left: 3px solid ${props => props.theme.$RP0};
       padding-left: 8px;
       p {
-        color: #8f959e;
+        color: ${props => props.theme.$T1};
       }
     }
     ul {
       padding-left: 8px;
-      > li > p {
+      > li {
         margin: 0;
         position: relative;
         padding-left: 20px;
+        p {
+          margin: 0;
+        }
         &::before {
           position: absolute;
           content: '';
           width: 6px;
           height: 6px;
           border-radius: 6px;
-          background: ${props => props.theme.$N400};
+          background: ${props => props.theme.$RP0};
           left: 5px;
-          top: 12px;
+          top: 9px;
         }
       }
     }
