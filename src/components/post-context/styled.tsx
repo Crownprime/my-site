@@ -100,7 +100,7 @@ export const PostTextWrap = styled.div`
     }
     p {
       font-size: 16px;
-      line-height: 24px;
+      line-height: 26px;
       margin-top: 12px;
       margin-bottom: 12px;
       color: ${props => props.theme.$T0};
@@ -141,7 +141,7 @@ export const PostTextWrap = styled.div`
           border-radius: 6px;
           background: ${props => props.theme.$RP0};
           left: 5px;
-          top: 9px;
+          top: 10px;
         }
       }
     }

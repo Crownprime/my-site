@@ -4,6 +4,7 @@ export const TimeLineStyled = styled.div`
   position: relative;
   max-width: 800px;
   margin: 0 auto;
+  margin-bottom: 36px;
   &::before {
     content: '';
     width: 2px;
