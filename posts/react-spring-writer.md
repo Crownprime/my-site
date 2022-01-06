@@ -36,7 +36,7 @@ const WriteText = () => {
 
 useSpring 的[使用方法](https://react-spring.io/hooks/use-spring)这里不多赘述，我们需要确定的是我们可以指定前数值「from」和后数值「to」，由 useSpring 可以创建一组从「from」过渡到「to」的离散的数值，当这些数值足够密集且在较短的时间内变化就可以得到连续的动画效果了。这其实和电影、动画的原理完全相同。
 
-```
+```tsx
 const WriteText = () => {
   const TEXT = 'Hello, World!'
   const [style, api] = useSpring(() => ({
@@ -90,7 +90,7 @@ const WriteText = () => {
 
 系数 a 越小，说明光标停顿的时间越长，说明 writer 是一个越加不熟练的打字员。无关其他我们可以先得到一些代码思路：
 
-```
+```tsx
 // write word 动作在一帧中所占比例（剩余时间即为停顿时间）
 const WRITE_TIMING = 0.1
 // 根据帧头、帧尾，得到本帧 write action 完成的时间
@@ -113,7 +113,7 @@ const getWriteTime = (prev: number, next: number) => {
 
 然后我们把思路转化为代码，首先我们要实现时间轴中插入关键帧的方法
 
-```
+```tsx
 // 帧长度
 const FRAME_LEN = 1
 // 元素宽度长度
@@ -136,7 +136,7 @@ const getWriteTimeLine = (prev: number, next: number, last = 0) => {
 
 需要注意的是，由于我们这里恰好 1 帧增加 1ch 所以容易把 prev 当作 echo 轴的初始值。所以在入参中我们还需要加入 last 作为元素轴的初始值，同时需要在最后返回以便在加工下一段时间轴时定位到元素当前形态。
 
-```
+```tsx
 const t = getWriteTimeLine(0, TEXT.length)
 const range = [...t.range, TEXT.length]
 const output = [...t.echo, TEXT.length]
@@ -144,7 +144,7 @@ const output = [...t.echo, TEXT.length]
 
 于是我们可以根据定义的 TEXT 长度来快速得到时间轴和对应的元素轴，然后我们在 style 再做一层映射
 
-```
+```tsx
 return (
   <animated.div
     style={{ width: style.width.to({ range, output }).to(w => `${w}ch`) }}
@@ -166,7 +166,7 @@ return (
 
 我们尝试实现删除字母的功能，可以预料的是 getWriteTimeLine 的接口定义需要新增字段，同时需要在构建物料轴的位置区别模式。
 
-```
+```tsx
 type GetWriteTimeLine = (prev: number, next: number, mode: 'w' | 'd', last: number) => {
   range: number[],
   echo: number[],
@@ -185,7 +185,7 @@ echo.push(
 
 该组件接收两个字符串，首先打印出第一个字符串然后逐渐删除 diff 的部分，最后打印出后续内容。
 
-```
+```tsx
 type IWriteText = React.FC<{ prime: string; final: string }>
 ```
 
@@ -193,7 +193,7 @@ type IWriteText = React.FC<{ prime: string; final: string }>
 
 首先我们还需要一个分析 prime 和 final 字符串的 diff 方法，需要注意我们需要后续构建时间轴的依赖来设计返回值
 
-```
+```tsx
 const diff = (words1: string, words2 = '') => {
   const arr1 = words1.split('')
   const arr2 = words2.split('')
@@ -218,7 +218,7 @@ const diff = (words1: string, words2 = '') => {
 
 根据 diff 函数我们得到了几个关键时间点，借助它们我们可以构建出时间轴
 
-```
+```tsx
 const diffs = diff(prime, final)
 const t1 = getWriteTimeLine(0, diffs.start)
 const t2 = getWriteTimeLine(diffs.start, diffs.del, 'd', t1.last)
@@ -232,7 +232,7 @@ const output = [...t1.echo, ...t2.echo, ...t3.echo, t3.last]
 
 动画的对象为元素的 width，所以对于元素的 text 我们还需要通过额外的手段去控制。其中的关键点是我们需要得知 text 从 prime 切换到 final 的时机，这里我们借助 react-spring [events](https://react-spring.io/common/props#events) 暴露出来的 onChange 钩子。
 
-```
+```tsx
 const [words, setWords] = useState(prime)
 const [style, api] = useSpring(() => ({
   ......
@@ -263,7 +263,7 @@ return (
 
 我们为 Mode 增加第三个种类用于模拟“停顿感”，要模拟这种感觉非常简单只需要静止元素变化并让时间轴持续。
 
-```
+```tsx
 type Mode = 'w' | 'd' | 's'
 // 对物料轴的变化做一个简单的抽象
 const getLast = (i: number, mode: Mode) => {
@@ -297,13 +297,13 @@ const getLast = (i: number, mode: Mode) => {
 
 为此我们可以定义一段动画的操作接口
 
-```
+```tsx
 type Action = (prev: number) => { end: number; mode: Mode }
 ```
 
 回想到之前的步骤，我们发现在定义 Action 的时候我们又不再关心「物料轴」的概念。因为我们对元素的属性变动又做了归纳就是我们前面提到的 Mode。不过虽然我们不关心过程中的元素变化，但我们仍然关心最后的结果，于是我们顺利定义了迭代器的接口
 
-```
+```tsx
 type TimeGenerator = (actions: Action[]) => {
   range: number[],
   echo: number[],
@@ -314,7 +314,7 @@ type TimeGenerator = (actions: Action[]) => {
 
 好啦一切框架定义结束，我们开始往里面填充代码，首先我们先实现迭代器。值得注意的是我们还声明了一个 history 数组用于记录时间轴转折点的变化，主要是用于结合 react-spring 的钩子方便判断动画进行到了哪个片段。
 
-```
+```tsx
 const timeGenerator = (actions: Action[]) => {
   let prev = 0,
     step = null
@@ -342,7 +342,7 @@ const timeGenerator = (actions: Action[]) => {
 
 随之我们开始重新编排动画，动手之前我突然想到 WriteText 组件只能编排这种「写-删-写」固定模式的动画吗，可不可能将 final 参数设定为可选参数仅仅实现「写」模式呢？有了迭代器插入动画变得简单很多，我们只需要根据条件 push 一组 action 即可。
 
-```
+```tsx
 const actions: Action[] = [
   prev => ({ end: prev + FRAME_SLEEP, mode: 's' }),
   prev => ({ end: prev + prime.length, mode: 'w' }),
@@ -372,7 +372,7 @@ if (final) {
 
 这些条件都不苛刻，我们对组件做一些改造
 
-```
+```tsx
 // 不手动触发
 // useEffect(() => {
 //   api.start({ width: last })
@@ -387,7 +387,7 @@ const { width } = useSpring({
 
 然后我们只要在使用的地方绑定一下执行顺序即可
 
-```
+```tsx
 // write-text.stories.tsx
 import { useSpringRef, useChain } from 'react-spring'
 
@@ -400,7 +400,7 @@ useChain([fstRef, secRef])
 
 我们还需要构建一个光标组件。这个就要简单的多只要能实现持续闪烁即可
 
-```
+```tsx
 const Cursor = () => {
   const style = useSpring({
     loop: true,

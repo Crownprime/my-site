@@ -41,7 +41,7 @@ vh 全拼 viewport height 意为将可视区域分为 100 份，每一份即为 
 
 由于我们的项目中使用了 tailwindcss，所以我们可以为已有的 className 增加样式。
 
-```
+```css
 @supports (-webkit-touch-callout: none) {
   .h-screen {
     height: -webkit-fill-available;

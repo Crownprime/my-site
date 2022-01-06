@@ -27,21 +27,18 @@ CentOS7 自带的 yum 源是没有 nginx，网上教程一大堆会给到一些�
 
 但这个工具在后续安装中还会被用到，所以提前装一下。
 
-```
-// 更新一下包和依赖关系
+```bash
+# 更新一下包和依赖关系
 yum upgrade
-// 安装 yum-utils
+# 安装 yum-utils
 yum install yum-utils 
 ```
 
 ## Nginx 源
 
-官方给出的源安装方式为手动添加 .repo 文件。首先需要定位到 yum.repos.d 文件，这个文件存放了所有 yum 的源文件，一般位置位于 /etc/yum.repos.d，顺带一提 /etc 目录默认存放所有软件的配置文件，我们后面还会多次用到。
+官方给出的源安装方式为手动添加 .repo 文件。首先需要定位到 yum.repos.d 文件，这个文件存放了所有 yum 的源文件，一般位置位于 `/etc/yum/repos.d`，顺带一提 `/etc` 目录默认存放所有软件的配置文件，我们后面还会多次用到。我们打开 nginx 的 repo 文件 `vim /etc/yum/repos.d/nginx.repo`
 
-```
-vim /etc/yum/repos.d/nginx.repo
-
-// 需要写入的字符
+```ini
 [nginx-stable]
 name=nginx stable repo
 baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
@@ -67,9 +64,9 @@ module_hotfixes=true
 
 ## 安装 Nginx
 
-```
+```bash
 yum install nginx
-// 检查是否安装成功
+# 检查是否安装成功
 nginx -v
 ```
 
@@ -89,16 +86,16 @@ Nginx 的线程运行用户影响到外部访问权限，对系统安全性有�
 
 Nginx 在安装时默认允许用户为 nginx:nginx ，为了与后续 php-fpm 统一我们新建一个用户和所属用户组 www:www。
 
-```
-// 新建用户组 www
+```bash
+# 新建用户组 www
 groupadd www
-// 新建用户 www 由于只用户权限区分，所以不需要登陆
+# 新建用户 www 由于只用户权限区分，所以不需要登陆
 useradd www -g www -s /sbin/nologin -M
 ```
 
 修改 nginx.conf 配置
 
-```
+```nginx
 user www www;
 ```
 
@@ -108,9 +105,9 @@ user www www;
 
 Nginx 配置文件（包涵入口文件和单站点文件）都可以对 log 进行一些配置，主要集中在 error_log，access_log，log_format 三个字段。前两者表示 log 的路径，建议从单站点区分 log。log_format 表示 log 的格式。
 
-[Nginx 官方文档](http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format)档记录了不同字符串的含义，依个人习惯配置即可，贴一下小 C 的配置
+[Nginx 官方文档](http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format)档记录了不同字符串的含义，依个人习惯配置即可，贴一下我的配置
 
-```
+```nginx
 log_format  main  '[$time_local] [$remote_addr] [$request] [$status] [$body_bytes_sent] [$http_referer] [] [$http_x_forwarded_for] [$request_time] [$upstream_addr] [$upstream_response_time] [$http_host] [$request_body] [$uri] [$server_port] [$remote_user] []';
 ```
 
@@ -126,51 +123,51 @@ log_format  main  '[$time_local] [$remote_addr] [$request] [$status] [$body_byte
 
 我们新建一个 blog.conf 作为博客的配置文件。
 
-```
-// 此处从 default.conf 拷贝过来可以少写一些格式
+```bash
+# 此处从 default.conf 拷贝过来可以少写一些格式
 cp /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/blog.conf
 vim /etc/nginx/conf.d/blog.conf
 ```
 
 配置的优化项有很多，这里就记录几个重点：
 
-```
+```nginx
 server {
-    # 访问的域名
-    server_name blog.domain.com;
-    # wordpress 存放的目录
-    root html;
-    index index.php;
-    location = / {
-        # 字面意思，当访问的 url 不存在则优先访问 url/
-        # 若仍然不存在则访问 /index.php
-        # 因为 wordpress 的入口文件就是 index.php，就是 apache .htaccess 代替方案
-        try_files $uri $uri/ /index.php?$args;
-    }
-    # 这个 location 就是从上一个打过来的
-    location ~ \.php$ {
-        # wp 的老式路由要确保 php 的 cgi.fix_pathinfo = 0;
-        include fastcgi_params;
-        fastcgi_intercept_errors on;
-        # php-fpm 服务的监听端口默认是 9000
-        fastcgi_pass 127.0.0.1:9000;
-        # $document_root 指的就是上面的 root
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-    }
+  # 访问的域名
+  server_name blog.domain.com;
+  # wordpress 存放的目录
+  root html;
+  index index.php;
+  location = / {
+    # 字面意思，当访问的 url 不存在则优先访问 url/
+    # 若仍然不存在则访问 /index.php
+    # 因为 wordpress 的入口文件就是 index.php，就是 apache .htaccess 代替方案
+    try_files $uri $uri/ /index.php?$args;
+  }
+  # 这个 location 就是从上一个打过来的
+  location ~ \.php$ {
+    # wp 的老式路由要确保 php 的 cgi.fix_pathinfo = 0;
+    include fastcgi_params;
+    fastcgi_intercept_errors on;
+    # php-fpm 服务的监听端口默认是 9000
+    fastcgi_pass 127.0.0.1:9000;
+    # $document_root 指的就是上面的 root
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+  }
 }
 ```
 
 好了就这么简单，唯一还需要做的就是确保上述的 root 文件夹的所有者为 www，否则会影响 wp 的更新操作
 
-```
+```bash
 chown -R www:www html
 ```
 
 ## 运行 Nginx
 
-yum 安装的 Nginx 可执行文件会自动拷贝到 /usr/sbin 下，该文件夹包涵在 centos 的环境变量中，所以可以在命令行中使用。
+Yum 安装的 Nginx 可执行文件会自动拷贝到 `/usr/sbin` 下，该文件夹包涵在 CentOS 的环境变量中，所以可以在命令行中使用。
 
-```
+```bash
 // 启动
 nginx
 // 停止
@@ -185,25 +182,23 @@ nginx -s stop
 
 文档指出要安装高版本的库同样需要先安装对应的 Yum 源。顺带一提 Centos7 自带的源其实是有 MySQL 的，只不过版本很低，如果没有版本需求可以略过这一步。
 
-`yum install platform-andversion-specific-package-name.rpm`
-
 文档给出的安装包的命名格式代表这不同版本操作系统和不同版本的数据库。官方同样给出了 [MySQL 版本列表文档](https://dev.mysql.com/downloads/repo/yum/)，Centos7 安装 MySQL8 应当选择 `mysql80-community-release-el7-3.noarch.rpm`。
 
-```
+```bash
 yum install mysql80-community-release-el7-3.noarch.rpm
 ```
 
-安装完可以检查 /etc/yum/repos.d 文件夹下，可以发现增加了描述 MySQL 软件源的文件。在安装 nginx 源时也提到了为什么是这个文件夹，这里不赘述。
+安装完可以检查 `/etc/yum/repos.d` 文件夹下，可以发现增加了描述 MySQL 软件源的文件。在安装 Nginx 源时也提到了为什么是这个文件夹，这里不赘述。
 
-就是因为上述提到的 Centos7 自带低版本 MySQL ，在安装前我们需要确认默认安装的为我们所需要的是 MySQL8。
+就是因为上述提到的 CentOS7 自带低版本 MySQL ，在安装前我们需要确认默认安装的为我们所需要的是 MySQL8。
 
-```
+```bash
 yum repolist enabled | grep "mysql.*-community.*"
 ```
 
 如果不是则还需要修改默认安装版本。这里终于正式用上了在上文多次提到的 yum-config-manager 工具。
 
-```
+```bash
 yum-config-manager --enable mysql80-community
 ```
 
@@ -211,7 +206,7 @@ yum-config-manager --enable mysql80-community
 
 一行命令搞定
 
-```
+```bash
 yum install mysql-community-server
 ```
 
@@ -219,24 +214,28 @@ yum install mysql-community-server
 
 安装完成之后做一些基本设置。应当使用 start、stop、restart 等命令去控制服务的状态。而且值得注意的是 MySQL 的服务名为 mysqld。
 
-```
-// 启动 mysql 服务
+```bash
+# 启动 mysql 服务
 systemctl start mysqld
-// 检查状态
+# 检查状态
 systemctl status mysqld
 ```
 
 首次启动服务需要初始化 root 账号密码，该 root 账号特指 ‘root’@‘localhost’，该账号默认密码被记录在 log 中：
 
-```
+```bash
 grep 'temporary password' /var/log/mysqld.log
 ```
 
 得到默认密码之后，我们需要启动进入服务并修改密码，否则为了安全考虑其他功能将不能得到激活。
 
-```
+```bash
 mysql -uroot -p
+```
 
+根据提示输入密码之后进入 MySQL bash 模式，并为 root 用户修改密码
+
+```sql
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';
 ```
 
@@ -244,8 +243,8 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';
 
 默认规定必须使用 8 位以上混合大小写字母、数字、特殊符号的密码。有时候我们不希望使用如此复杂的密码，所以我们可以去修改密码校验规则。当然在密码尚未初始化前修改规则是被禁止的，我们可以先设定一个复杂的临时密码，回头再做修改。
 
-```
-// 修改规则的命令
+```sql
+-- 修改规则的命令
 set global [rule_name]=[rule_value];
 ```
 
@@ -255,21 +254,20 @@ set global [rule_name]=[rule_value];
 
 MySQL 的用户表存储在 `mysql` 数据库的 `user` 表中，我们可以打印出来观察一下特征。
 
-```
+```sql
 use mysql;
-
 select host,user,authentication_string,plugin from user;
 ```
 
 可以发现用户主要受限于 user，password，host 三者去管制其登陆，在宽松的氛围下我们可以设置 host 为 ‘%’，意为允许所有的 ip 登录访问数据库。
 
-```
+```sql
 GRANT ALL ON *.* TO 'root'@'%';
 ```
 
 同样的，需要为其设置密码
 
-```
+```sql
 ALTER USER 'root'@'%' IDENTIFIED BY 'password';
 ```
 
@@ -287,7 +285,7 @@ Centos7 官方源自带 PHP5 版本，不过这不是我们想要的，WordPress
 
 安装前先装一下 gcc 环境
 
-```
+```bash
 yum -y install gcc gcc-c++
 ```
 ## 安装 Remi 源
@@ -300,19 +298,19 @@ yum -y install gcc gcc-c++
 
 大概意思是较为权威的第三方软件的源，这个项目目前由 Fedora 维护，我们可以在[它的官网](https://fedoraproject.org/wiki/EPEL?rd=EPEL/en)找到使用方法。
 
-```
+```bash
 yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 ```
 
 在安装 Remi 源之前同样建议先查阅一下[它的官方文档](http://rpms.remirepo.net/)，也许你会发现比本笔记更优雅的安装方式。
 
-```
+```bash
 yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 ```
 
 好了又到了 yum-config-manager 出场的时候了，我们需要确定需要安装的 PHP 版本
 
-```
+```bash
 yum-config-manager --enable remi-php71 [ 安装PHP 7.1 ]
 yum-config-manager --enable remi-php72 [ 安装PHP 7.2 ]
 yum-config-manager --enable remi-php73 [ 安装PHP 7.3 ]
@@ -322,13 +320,13 @@ yum-config-manager --enable remi-php73 [ 安装PHP 7.3 ]
 
 安装 PHP 以及所需要的基本模块。
 
-```
+```bash
 yum -y install php php-mcrypt php-devel php-cli php-gd php-pear php-curl php-fpm php-mysql php-ldap php-zip php-fileinfo 
 ```
 
 查看 PHP 版本，检查是否安装成功
 
-```
+```bash
 php -v
 ```
 
@@ -338,26 +336,26 @@ php -v
 
 找到 php-fpm 配置文件，通常路径在 /etc/php-fpm.d/www.conf
 
-```
+```ini
 user=www
 group=www
 ```
 
 其次，还必要设置的是前面提到的 php.ini 文件中的 cgi.fix_pathinfo 选项。php.ini 通常在 /etc/php.ini
 
-```
+```ini
 cgi.fix_pathinfo=0
 ```
 
 启动 php-fpm
 
-```
+```bash
 systemctl start php-fpm
 ```
 
 设置开机启动
 
-```
+```bash
 systemctl enable php-fpm.service
 ```
 

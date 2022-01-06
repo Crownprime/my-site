@@ -10,7 +10,7 @@ ts 或许没有我们想象中的那么聪明。
 # 背景
 
 被一个问题困扰已久，看下面一段 ts 代码
-```
+```ts
 const tags = []
 if (flagA) {
   tags.push({ text: 'textA', color: 'colorA' })
@@ -20,7 +20,7 @@ if (flagA) {
 
 但如果有很多条件判断呢？比如：
 
-```
+```ts
 const tags = []
 if (flagA) {
   tags.push({ text: 'textA', color: 'colorA' })
@@ -38,7 +38,7 @@ if (flagD) {
 
 这段代码是不是看着头开始痛起来了，所以我们通常会这么写
 
-```
+```ts
 // flagA?: boolean
 type Tag = {
   text: string
@@ -64,7 +64,7 @@ const tags = [
 
 可以看到接口 `Array` 存在范型 `T`，也就是说我们在 `new Array` 时就会确定 `T` 的类型，我们上述代码中的 `[...]` 其实也是 `new Array` 的一种语法糖
 
-```
+```ts
 const tags = new Array([
   flagA && { text: "textA", color: "colorA" },
   flagB && { text: "textB", color: "colorB" }
@@ -100,7 +100,7 @@ const tags = new Array([
 
 所以借助 `is` 我们可以非常优雅的完成类型范围缩小。
 
-```
+```ts
 type Tag = {
   text: string
   color: string
@@ -121,14 +121,14 @@ const tags = [
 
 仔细想一想如果失去了其中一种约束，这时是不是就等于
 
-```
+```ts
 // filter<S>(): S[]
 const tags = [...].filter<any>(callback)
 ```
 
 然后我们再换一种写法
 
-```
+```ts
 const tags = [...].filter(callback) as any[]
 ```
 
@@ -140,7 +140,7 @@ const tags = [...].filter(callback) as any[]
 
 我们已经知道了 `is` 具有断言的作用，当然这是针对使用函数判别某个变量时的场景。那么如果是在 `class` 内呢？先举个场景例子
 
-```
+```ts
 type Form = AForm | BForm
 class Common {
   form: Form
@@ -174,7 +174,7 @@ class BForm {
 
 这种场景和我上述讲的 `filter` 有些相似，但并不是完全没有解决办法，我们可以借助 `enum` 来告诉 ts `common.form.type` 不是仅仅是一个字符串，他还有决定上层类型的作用
 
-```
+```ts
 enum FormType {
   A = 'A',
   B = 'B',
@@ -196,7 +196,7 @@ function echoCommonContext(common: Common) {
 
 这会使得 aForm.type 被永久的打上 FormType.A 的烙印，他不能说别的任何值，哪怕是看起来完全相同的值字符串 `"A"`。我们还有更优雅的解决方案，我们可以写一个函数专门用于判断 AForm 类型尝试借助上文讲的 `is` 去断言类型
 
-```
+```ts
 const isAForm = (form: Form): form is AForm => form.type === 'A'
 ```
 
@@ -216,7 +216,7 @@ const isAForm = (form: Form): form is AForm => form.type === 'A'
 
 官方的解释很直白，这玩意是专为 `class` 准备的，有了他我们就可以这样写
 
-```
+```ts
 class Common {
   form: Form
   constructor(f: Form) {

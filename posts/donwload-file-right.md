@@ -16,7 +16,7 @@ tags: Geek
 
 从目标上来看，我们希望得到正确的数据，即
 
-```
+```ts
 const blob = response.data
 ```
 
@@ -34,7 +34,7 @@ const blob = response.data
 
 经过这一系列连锁反应，我们就可以得到正确的数据。因此我们写下第一行代码
 
-```
+```ts
 request.post(url, data, { responseType: 'blob' })
 ```
 
@@ -42,7 +42,7 @@ request.post(url, data, { responseType: 'blob' })
 
 一般请求库会做一些中间层用于打点或者错误拦截，常见的操作会对 data 中的某些属性进行操作，而当 data 是 Blob 时可以会出现一些意外导致报错，所以我们需要把他排除在外
 
-```
+```ts
 await next()
 const { response } = ctx
 if (!error && response?.data instanceof Blob) {
@@ -60,7 +60,7 @@ if (!error && response?.data instanceof Blob) {
 
 而这两种方式都需要得到下载文件的 url，因此我们需要通过 URL.createObjectURL() 这个方法[实现 Blob 向 url 的转化](https://developer.mozilla.org/zh-CN/docs/Web/API/URL/createObjectURL)
 
-```
+```ts
 const { data } = await exportFile()
 if (data instanceof Blob) {
   fileDownload(URL.createObjectURL(data))
@@ -94,7 +94,7 @@ const fileDownload = (url: string) => {
 
 因此我们可以写个简单的正则拿到后端指定的文件名
 
-```
+```ts
 const { headers } = await exportFile()
 const fileName = headers['content-disposition']?.replace(/.+?filename=(.+)/, '$1')
 ```
@@ -111,11 +111,11 @@ decodeURIComponent(fileName)
 
 对 fileDownload 方法做一些优化
 
-```
+```ts
 const fileDownload = (url: string, fileName?: string) => {
-  ...
+  // ...
   $a.download = fileName || url
-  ...
+  // ...
 }
 ```
 

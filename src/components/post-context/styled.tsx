@@ -105,17 +105,6 @@ export const PostTextWrap = styled.div`
       margin-bottom: 12px;
       color: ${props => props.theme.$T0};
       letter-spacing: 0.02em;
-      > code {
-        background: ${props => props.theme.$N800};
-        color: ${props => props.theme.$N300};
-        padding: 2px ${props => props.theme.$sm};
-        border-radius: ${props => props.theme.$mn};
-      }
-      > a {
-        font-style: italic;
-        text-decoration: underline;
-        padding: 0 4px;
-      }
     }
     blockquote {
       border-left: 3px solid ${props => props.theme.$RP0};

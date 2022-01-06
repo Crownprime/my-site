@@ -9,10 +9,23 @@ import PostView from '@/features/post'
 import { fetchPostIds, fetchPostById } from 'apis'
 
 import 'prismjs/components/prism-markup'
+// css
+import 'prismjs/components/prism-css'
+
+// tsx 族类
 import 'prismjs/components/prism-javascript'
 import 'prismjs/components/prism-jsx'
 import 'prismjs/components/prism-typescript'
 import 'prismjs/components/prism-tsx'
+
+// sql
+import 'prismjs/components/prism-sql'
+// bash
+import 'prismjs/components/prism-bash'
+// ini
+import 'prismjs/components/prism-ini'
+// nginx
+import 'prismjs/components/prism-nginx'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = fetchPostIds().map(id => ({ params: { id } }))

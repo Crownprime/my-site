@@ -26,7 +26,7 @@ Dan 的博客很杂，从编程技术到人生总结都有，我读了不少获�
 
 React 的重新渲染都是以组件为单位的，也就是说组件层面的 state 被更新时就会触发组件的视图重新渲染。那么当确定一个组件会被更新时我们能不能尽量减小重新渲染的范围呢？
 
-```
+```tsx
 export default function App() {
   let [color, setColor] = useState('red');
   return (
@@ -50,7 +50,7 @@ function ExpensiveTree() {
 
 我们把用到 `color` 的 dom 单独提取为组件，上文提到 react 更新是以组件为单位的，把会更新的内容单独提取就相当于把无关的内容排除在重新渲染之外，可以提高渲染效率。
 
-```
+```tsx
 export default function App() {
   return (
     <>
@@ -75,7 +75,7 @@ function Form() {
 
 如果组件的根节点 `<div></div>` 依赖 state 变化那应该怎么做呢？
 
-```
+```tsx
 export default function App() {
   let [color, setColor] = useState('red');
   return (
@@ -90,7 +90,7 @@ export default function App() {
 
 我们没办法像上文中的那样单独分离兄弟组件，但我们可以分离父子组件
 
-```
+```tsx
 export default function App() {
   return (
     <ColorPicker>
