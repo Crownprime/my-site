@@ -3,10 +3,14 @@ import cls from 'classnames'
 import { head } from 'lodash-es'
 import ReactMarkdown from 'react-markdown'
 import { configureAnchors } from 'react-scrollable-anchor'
-import PostImage from '@/components/post-image'
 import { Anchor, useAnchor, AnchorContext } from '@/components/post-toc'
 import { HEADER_HEIGHT } from '@/constants/header'
-import { PreTarget, CodeTarget, ATarget } from '@/components/post-target'
+import {
+  PreTarget,
+  CodeTarget,
+  ATarget,
+  ImgTarget,
+} from '@/components/post-target'
 import { PostTextWrap } from './styled'
 
 configureAnchors({ offset: -(HEADER_HEIGHT + 20) })
@@ -15,9 +19,6 @@ const PostHtml: FC<{ data: Post }> = ({ data }) => {
   return (
     <ReactMarkdown
       components={{
-        img({ src, alt }) {
-          return <PostImage src={src} alt={alt} />
-        },
         h1({ children }) {
           return (
             <Anchor id={head(children as string[])}>
@@ -32,6 +33,7 @@ const PostHtml: FC<{ data: Post }> = ({ data }) => {
             </Anchor>
           )
         },
+        img: ImgTarget,
         pre: PreTarget,
         code: CodeTarget,
         a: ATarget,

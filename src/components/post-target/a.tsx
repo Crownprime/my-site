@@ -8,7 +8,7 @@ const ATargetStyled = styled.a`
   }
 `
 
-export const ATarget: React.FC<{ href: string }> = ({ href, children }) => {
+export const ATarget: React.FC<{ href?: string }> = ({ href, children }) => {
   return (
     <ATargetStyled href={href} className="px-mn" target="_blank">
       <NearMeIcon className="pr-ii" />

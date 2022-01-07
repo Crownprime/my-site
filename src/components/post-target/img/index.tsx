@@ -1,14 +1,13 @@
 import { FC, useState } from 'react'
 import { createPortal } from 'react-dom'
-import Image, { ImageProps } from 'next/image'
+import Image from 'next/image'
 import { ImagePreviewWrap } from './style'
 import { CloseIcon } from '@/components/icons'
 
-const ImagePreview: FC<
-  ImageProps & {
-    onClose?: () => void
-  }
-> = ({ onClose, ...prop }) => {
+const ImagePreview: FC<{ src: string; onClose?: () => void }> = ({
+  onClose,
+  ...prop
+}) => {
   const handleClose = e => {
     e.stopPropagation()
     onClose?.()
@@ -26,22 +25,29 @@ const ImagePreview: FC<
   )
 }
 
-const PostImage: FC<ImageProps> = props => {
+export const ImgTarget: FC<{ src?: string; alt?: string }> = ({
+  src,
+  ...props
+}) => {
   const [preview, setPreview] = useState(false)
   const handleClick = (val: boolean) => {
     setPreview(val)
   }
+  if (!src) {
+    return null
+  }
   return (
-    <div
-      className="relative flex justify-center"
-      onClick={() => handleClick(true)}
-    >
-      <Image {...props} width="700" height="200" objectFit="contain" />
+    <span className="flex justify-center" onClick={() => handleClick(true)}>
+      <Image
+        src={src}
+        {...props}
+        width="700"
+        height="300"
+        objectFit="contain"
+      />
       {preview && (
-        <ImagePreview {...props} onClose={() => handleClick(false)} />
+        <ImagePreview src={src} {...props} onClose={() => handleClick(false)} />
       )}
-    </div>
+    </span>
   )
 }
-
-export default PostImage
